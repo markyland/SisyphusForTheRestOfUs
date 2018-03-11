@@ -465,9 +465,9 @@ public class GraphSolver {
 
                     p = path[u][v];
 
-                    System.out.println("Take arc " + cheapestLabel[u][p]
-
-                            + " from " + u + " to " + p);
+//                    System.out.println("Take arc " + cheapestLabel[u][p]
+//
+//                            + " from " + u + " to " + p);
 
                     Path path=pathList.get(cheapestLabel[u][p]);
 
@@ -504,11 +504,11 @@ public class GraphSolver {
 
                 arcs[u][v]--; // decrement count of parallel arcs
 
-                System.out.println("Take arc "
-
-                        + label[u][v].elementAt(arcs[u][v]) + " from " + u
-
-                        + " to " + v); // use each arc label in turn
+//                System.out.println("Take arc "
+//
+//                        + label[u][v].elementAt(arcs[u][v]) + " from " + u
+//
+//                        + " to " + v); // use each arc label in turn
 
                 Path path=pathList.get(label[u][v].elementAt(arcs[u][v]));
 

@@ -80,16 +80,22 @@ public class SisyphusForTheRestOfUs {
                         throw new Exception("Input file does not exist!");
                     }
 
-                    final String outputTrack;
-                    final String outputPng;
+                    final File outputTrack;
+                    final File outputPng;
                     String inputFileName = inputFile.getName();
                     if (inputFileName.endsWith(".csv") || inputFileName.endsWith(".asc")){
-                        outputTrack=new File(inputFile.getParent(), inputFileName.substring(0, inputFileName.length()-4)+".thr").getPath();
-                        outputPng=new File(inputFile.getParent(), inputFileName.substring(0, inputFileName.length()-4)+".png").getPath();
+                        outputTrack=new File(inputFile.getParent(), inputFileName.substring(0, inputFileName.length()-4)+".thr");
+                        outputPng=new File(inputFile.getParent(), inputFileName.substring(0, inputFileName.length()-4)+".png");
                     }
                     else{
-                        outputTrack=new File(inputFile.getParent(), inputFileName+".thr").getPath();
-                        outputPng=new File(inputFile.getParent(), inputFileName+".png").getPath();
+                        outputTrack=new File(inputFile.getParent(), inputFileName+".thr");
+                        outputPng=new File(inputFile.getParent(), inputFileName+".png");
+                    }
+
+                    if (outputTrack.exists() || outputPng.exists()){
+                        if (JOptionPane.showConfirmDialog(frame, "Replace existing output files?", "",  JOptionPane.YES_NO_OPTION)==JOptionPane.NO_OPTION){
+                            return;
+                        }
                     }
 
                     convertButton.setEnabled(false);
@@ -99,7 +105,7 @@ public class SisyphusForTheRestOfUs {
                     new SwingWorker<Void, Void>(){
                         @Override
                         protected Void doInBackground() throws Exception {
-                            GraphSolver.convert(inputFile.getPath(), outputTrack, outputPng, progressBar);
+                            GraphSolver.convert(inputFile.getPath(), outputTrack.getPath(), outputPng.getPath(), progressBar);
 
                             return null;
                         }
