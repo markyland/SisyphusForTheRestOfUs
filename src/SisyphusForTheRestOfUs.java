@@ -25,7 +25,7 @@ public class SisyphusForTheRestOfUs {
         panel.add(createMainPanel(), BorderLayout.CENTER);
         panel.add(createButtonPanel(), BorderLayout.SOUTH);
 
-        frame = new JFrame();
+        frame = new JFrame("SisyphusForTheRestOfUs");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.getContentPane().add(panel);
         frame.pack();

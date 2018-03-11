@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ArtifactManager">
-    <artifact type="jar" name="unnamed">
-      <output-path>$PROJECT_DIR$/out/artifacts/unnamed</output-path>
-      <root id="archive" name="unnamed.jar">
+    <artifact type="jar" name="SisyphusForTheRestOfUs">
+      <output-path>$PROJECT_DIR$/out/artifacts/SisyphusForTheRestOfUs</output-path>
+      <root id="archive" name="SisyphusForTheRestOfUs.jar">
         <element id="directory" name="META-INF">
           <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
         </element>
