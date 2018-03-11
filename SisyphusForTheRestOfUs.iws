@@ -2,10 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="22761d2f-e137-4dba-abc8-44fa024808b7" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/SisyphusForTheRestOfUs2.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SisyphusForTheRestOfUs.ipr" afterPath="$PROJECT_DIR$/SisyphusForTheRestOfUs.ipr" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/SisyphusForTheRestOfUs.iws" afterPath="$PROJECT_DIR$/SisyphusForTheRestOfUs.iws" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/SisyphusForTheRestOfUs.java" afterPath="$PROJECT_DIR$/src/SisyphusForTheRestOfUs.java" />
+      <change type="DELETED" beforePath="C:\Users\mark\Desktop\SisyphusForTheRestOfUs\SisyphusForTheRestOfUs.iws" afterPath="" />
     </list>
     <ignored path="SisyphusForTheRestOfUs.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -111,7 +108,7 @@
       <file leaf-file-name="SisyphusForTheRestOfUs.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/SisyphusForTheRestOfUs.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="8" selection-start="328" selection-end="328" vertical-scroll-proportion="0.20298508">
+            <state line="25" column="54" selection-start="454" selection-end="454" vertical-scroll-proportion="0.38059703">
               <folding>
                 <element signature="docComment;class#SisyphusForTheRestOfUs#0" expanded="false" />
               </folding>
@@ -474,7 +471,7 @@
     <option name="SHOW_VCS_ERROR_NOTIFICATIONS" value="true" />
     <option name="FORCE_NON_EMPTY_COMMENT" value="false" />
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="false" />
-    <option name="LAST_COMMIT_MESSAGE" />
+    <option name="LAST_COMMIT_MESSAGE" value="cleanup" />
     <option name="MAKE_NEW_CHANGELIST_ACTIVE" value="false" />
     <option name="OPTIMIZE_IMPORTS_BEFORE_PROJECT_COMMIT" value="false" />
     <option name="CHECK_FILES_UP_TO_DATE_BEFORE_COMMIT" value="false" />
@@ -487,6 +484,7 @@
     <option name="UPDATE_GROUP_BY_CHANGELIST" value="false" />
     <option name="SHOW_FILE_HISTORY_AS_TREE" value="false" />
     <option name="FILE_HISTORY_SPLITTER_PROPORTION" value="0.6" />
+    <MESSAGE value="cleanup" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -548,7 +546,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/SisyphusForTheRestOfUs.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="8" selection-start="328" selection-end="328" vertical-scroll-proportion="0.20298508">
+        <state line="25" column="54" selection-start="454" selection-end="454" vertical-scroll-proportion="0.38059703">
           <folding>
             <element signature="docComment;class#SisyphusForTheRestOfUs#0" expanded="false" />
           </folding>
