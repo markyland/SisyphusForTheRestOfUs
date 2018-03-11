@@ -8,6 +8,7 @@
 import com.slightlyloony.jsisyphus.*;
 import com.slightlyloony.jsisyphus.Point;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.*;
 import java.util.*;
@@ -148,6 +149,7 @@ public class GraphSolver {
 
             if (percentage!=lastPercentage){
                 System.err.println(percentage + "%");
+                progressMonitor.setProgress(percentage);
 
                 lastPercentage=percentage;
             }
@@ -522,7 +524,11 @@ public class GraphSolver {
     static HashMap<String, Path> pathList = new HashMap<String, Path>();
     static ArrayList<Point> answerPoints = new ArrayList<Point>();
 
-    public static void convert(String inputFile, String outputFileTHR, String outputFilePNG) throws Exception {
+    static ProgressMonitor progressMonitor;
+
+    public static void convert(String inputFile, String outputFileTHR, String outputFilePNG, ProgressMonitor progressMonitor) throws Exception {
+        GraphSolver.progressMonitor=progressMonitor;
+
         BufferedReader in = new BufferedReader(new FileReader(inputFile));
 
         String line=in.readLine();
@@ -550,13 +556,13 @@ public class GraphSolver {
                 if (lastVerticeId!=-1){
                     Path path=new Path("" + (pathList.size()+1), lastVerticeId, getVerticeId(lastX, lastY), new ArrayList<>(pathVertices));
                     pathList.put("" + (pathList.size()+1), path);
-                    System.err.println("added : " + path);
+                    //System.err.println("added : " + path);
 
                     List<Point> reversePathVertices=new ArrayList<>(pathVertices);
                     Collections.reverse(reversePathVertices);
                     path=new Path("" + (pathList.size()+1), getVerticeId(lastX, lastY), lastVerticeId, reversePathVertices);
                     pathList.put("" + (pathList.size()+1), path);
-                    System.err.println("added : " + path);
+                    //System.err.println("added : " + path);
                 }
 
                 lastPath=pathId;
@@ -671,7 +677,7 @@ public class GraphSolver {
         pathList.put("revStart", new Path("start", verticeId, 0, reversePathVertices));
 
         for (Path path : pathList.values()){
-            System.err.println(path);
+            //System.err.println(path);
 
             G.addArc(path.index, path.fromV, path.toV, path.cost);
         }
@@ -680,9 +686,9 @@ public class GraphSolver {
 
         G.printCPT(0); // print it, starting from vertex 0
 
-        for (Point point : answerPoints){
-            System.err.println(point.x + "," + point.y);
-        }
+//        for (Point point : answerPoints){
+//            System.err.println(point.x + "," + point.y);
+//        }
 
         plot(outputFileTHR, outputFilePNG, answerPoints);
 
@@ -690,15 +696,11 @@ public class GraphSolver {
     }
 
     private static void plot(final String outputFileTHR, final String outputFilePNG, final List<Point> points) throws Exception {
-
-
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
                 dc.setEraseSpacing(0.005);
                 dc.eraseTo(com.slightlyloony.jsisyphus.Point.fromXY(points.get(0).x, points.get(0).y));
-
-                System.err.println("-------------------------------------------");
 
                 for (Point point : points){
                     com.slightlyloony.jsisyphus.Point dest = com.slightlyloony.jsisyphus.Point.fromXY(point.x, point.y);

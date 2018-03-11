@@ -14,6 +14,8 @@ import java.util.*;
  */
 public class SisyphusForTheRestOfUs {
 
+    private JTextField vectorFileInputTF = new JTextField(40);
+
     public SisyphusForTheRestOfUs(){
         JPanel panel = new JPanel(new BorderLayout());
 
@@ -31,8 +33,6 @@ public class SisyphusForTheRestOfUs {
     }
 
     private JPanel createMainPanel(){
-        final JTextField vectorFileInputTF = new JTextField(40);
-
         JButton vectorFileInputButton = new JButton(new AbstractAction("..."){
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fc = new JFileChooser();
@@ -55,7 +55,52 @@ public class SisyphusForTheRestOfUs {
     }
 
     private JPanel createButtonPanel(){
-        JButton convertButton = new JButton("Convert!");
+        JButton convertButton = new JButton(new AbstractAction("Convert!"){
+            public void actionPerformed(final ActionEvent e) {
+                try{
+                    final File inputFile = new File(vectorFileInputTF.getText());
+
+                    if (!inputFile.exists()){
+                        throw new Exception("Input file does not exist!");
+                    }
+
+                    final String outputTrack;
+                    final String outputPng;
+                    String inputFileName = inputFile.getName();
+                    if (inputFileName.endsWith(".csv") || inputFileName.endsWith(".asc")){
+                        outputTrack=new File(inputFile.getParent(), inputFileName.substring(0, inputFileName.length()-4)+".thr").getPath();
+                        outputPng=new File(inputFile.getParent(), inputFileName.substring(0, inputFileName.length()-4)+".png").getPath();
+                    }
+                    else{
+                        outputTrack=new File(inputFile.getParent(), inputFileName+".thr").getPath();
+                        outputPng=new File(inputFile.getParent(), inputFileName+".png").getPath();
+                    }
+
+                    final ProgressMonitor progressMonitor = new ProgressMonitor(SwingUtilities.getWindowAncestor((Component)e.getSource()), "Converting!", "", 0, 100);
+
+                    new SwingWorker<Void, Void>(){
+                        @Override
+                        protected Void doInBackground() throws Exception {
+                            GraphSolver.convert(inputFile.getPath(), outputTrack, outputPng, progressMonitor);
+
+                            return null;
+                        }
+
+                        @Override
+                        protected void done() {
+                            progressMonitor.close();
+
+                            JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor((Component)e.getSource()), "File Converted!");
+                        }
+                    }.execute();
+                }
+                catch (Exception exception){
+                    exception.printStackTrace();
+
+                    JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor((Component)e.getSource()), exception.getMessage());
+                }
+            }
+        });
 
         JButton exitButton = new JButton(new AbstractAction("Exit"){
             public void actionPerformed(ActionEvent e) {
