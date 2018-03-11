@@ -527,6 +527,11 @@ public class GraphSolver {
     static JProgressBar progressBar;
 
     public static void convert(String inputFile, String outputFileTHR, String outputFilePNG, JProgressBar progressBar) throws Exception {
+        vertices.clear();
+        currentVertice=1;
+        pathList.clear();
+        answerPoints.clear();
+
         GraphSolver.progressBar=progressBar;
 
         BufferedReader in = new BufferedReader(new FileReader(inputFile));
