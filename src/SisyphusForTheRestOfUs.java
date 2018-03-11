@@ -48,6 +48,8 @@ public class SisyphusForTheRestOfUs {
             }
         });
 
+        vectorFileInputButton.setFocusable(false);
+
         JPanel p = new JPanel(new BorderLayout(10, 10));
         p.add(new JLabel("Ascii Vector File : "), BorderLayout.WEST);
         p.add(vectorFileInputTF, BorderLayout.CENTER);
