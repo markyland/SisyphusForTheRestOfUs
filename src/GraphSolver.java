@@ -522,8 +522,8 @@ public class GraphSolver {
     static HashMap<String, Path> pathList = new HashMap<String, Path>();
     static ArrayList<Point> answerPoints = new ArrayList<Point>();
 
-    public static void convert() throws Exception {
-        BufferedReader in = new BufferedReader(new FileReader("C:/Users/mark/Desktop/dog.csv"));
+    public static void convert(String inputFile, String outputFileTHR, String outputFilePNG) throws Exception {
+        BufferedReader in = new BufferedReader(new FileReader(inputFile));
 
         String line=in.readLine();
 
@@ -684,15 +684,15 @@ public class GraphSolver {
             System.err.println(point.x + "," + point.y);
         }
 
-        plot(answerPoints);
+        plot(outputFileTHR, outputFilePNG, answerPoints);
 
         // System.out.println("Cost = " + G.cost());
     }
 
-    private static void plot(final List<Point> points) throws Exception {
+    private static void plot(final String outputFileTHR, final String outputFilePNG, final List<Point> points) throws Exception {
 
 
-        new ATrack("flowertest"){
+        new ATrack(""){
             @Override
             protected void trace() throws IOException {
                 dc.setEraseSpacing(0.005);
@@ -706,8 +706,8 @@ public class GraphSolver {
                     dc.lineTo(dc.getCurrentRelativePosition().vectorTo(dest));
                 }
 
-                dc.renderPNG( pngFileName );
-                dc.write( trackFileName );
+                dc.renderPNG( outputFilePNG );
+                dc.write( outputFileTHR );
             }
         }.trace();
     }
