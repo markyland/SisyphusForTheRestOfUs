@@ -87,11 +87,11 @@ public class SisyphusForTheRestOfUs {
                     String inputFileName = inputFile.getName();
                     if (inputFileName.endsWith(".csv") || inputFileName.endsWith(".asc")){
                         outputTrack=new File(inputFile.getParent(), inputFileName.substring(0, inputFileName.length()-4)+".thr");
-                        outputPng=new File(inputFile.getParent(), inputFileName.substring(0, inputFileName.length()-4)+".png");
+                        outputPng=new File(inputFile.getParent(), inputFileName.substring(0, inputFileName.length()-4)+"-table.png");
                     }
                     else{
                         outputTrack=new File(inputFile.getParent(), inputFileName+".thr");
-                        outputPng=new File(inputFile.getParent(), inputFileName+".png");
+                        outputPng=new File(inputFile.getParent(), inputFileName+"-table.png");
                     }
 
                     if (outputTrack.exists() || outputPng.exists()){
@@ -105,9 +105,32 @@ public class SisyphusForTheRestOfUs {
                     frame.pack();
 
                     new SwingWorker<Void, Void>(){
+
+                        private boolean success=false;
+
                         @Override
                         protected Void doInBackground() throws Exception {
-                            GraphSolver.convert(inputFile.getPath(), outputTrack.getPath(), outputPng.getPath(), progressBar);
+                            try{
+                                GraphSolver.convert(inputFile.getPath(), outputTrack.getPath(), outputPng.getPath(), progressBar);
+                            }
+                            catch (Throwable exception){
+                                exception.printStackTrace();
+
+                                String error=exception.getMessage();
+
+                                if (error!=null && error.contains("strongly connected")){
+                                    error="The lines in your image are not fully connected";
+                                }
+                                else{
+                                    error="Could not convert image";
+                                }
+
+                                JOptionPane.showMessageDialog(frame, error);
+
+                                return null;
+                            }
+
+                            success=true;
 
                             return null;
                         }
@@ -117,11 +140,13 @@ public class SisyphusForTheRestOfUs {
                             convertButton.setEnabled(true);
                             progressBar.setVisible(false);
 
-                            JOptionPane.showMessageDialog(frame, "File Converted!");
+                            if (success) {
+                                JOptionPane.showMessageDialog(frame, "File Converted!");
+                            }
                         }
                     }.execute();
                 }
-                catch (Exception exception){
+                catch (Throwable exception){
                     exception.printStackTrace();
 
                     JOptionPane.showMessageDialog(frame, exception.getMessage());
