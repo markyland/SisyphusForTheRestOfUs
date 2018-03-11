@@ -522,7 +522,7 @@ public class GraphSolver {
     static HashMap<String, Path> pathList = new HashMap<String, Path>();
     static ArrayList<Point> answerPoints = new ArrayList<Point>();
 
-    public static void main(String args[]) throws Exception {
+    public static void convert() throws Exception {
         BufferedReader in = new BufferedReader(new FileReader("C:/Users/mark/Desktop/dog.csv"));
 
         String line=in.readLine();
