@@ -15,6 +15,8 @@ import java.util.*;
 public class SisyphusForTheRestOfUs {
 
     private JTextField vectorFileInputTF = new JTextField(40);
+    private JProgressBar progressBar = new JProgressBar(0, 100);
+    private JFrame frame;
 
     public SisyphusForTheRestOfUs(){
         JPanel panel = new JPanel(new BorderLayout());
@@ -23,12 +25,13 @@ public class SisyphusForTheRestOfUs {
         panel.add(createMainPanel(), BorderLayout.CENTER);
         panel.add(createButtonPanel(), BorderLayout.SOUTH);
 
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.getContentPane().add(panel);
         frame.pack();
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
+        frame.setIconImage(new ImageIcon(getClass().getResource("icon.png")).getImage());
         frame.setVisible(true);
     }
 
@@ -37,7 +40,7 @@ public class SisyphusForTheRestOfUs {
             public void actionPerformed(ActionEvent e) {
                 JFileChooser fc = new JFileChooser();
 
-                int returnVal=fc.showOpenDialog(SwingUtilities.getWindowAncestor(vectorFileInputTF));
+                int returnVal=fc.showOpenDialog(frame);
 
                 if (returnVal == JFileChooser.APPROVE_OPTION) {
                     vectorFileInputTF.setText(fc.getSelectedFile().getPath());
@@ -51,11 +54,24 @@ public class SisyphusForTheRestOfUs {
         p.add(vectorFileInputButton, BorderLayout.EAST);
         p.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        return p;
+        JPanel ret = new JPanel();
+        ret.setLayout(new BoxLayout(ret, BoxLayout.Y_AXIS));
+
+        ret.add(p);
+
+        progressBar.setStringPainted(true);
+        progressBar.setVisible(false);
+
+        ret.add(progressBar);
+
+        return ret;
     }
 
     private JPanel createButtonPanel(){
-        JButton convertButton = new JButton(new AbstractAction("Convert!"){
+        final JButton convertButton = new JButton("Convert!");
+        convertButton.setFocusable(false);
+
+        convertButton.addActionListener(new AbstractAction("Convert!"){
             public void actionPerformed(final ActionEvent e) {
                 try{
                     final File inputFile = new File(vectorFileInputTF.getText());
@@ -76,28 +92,31 @@ public class SisyphusForTheRestOfUs {
                         outputPng=new File(inputFile.getParent(), inputFileName+".png").getPath();
                     }
 
-                    final ProgressMonitor progressMonitor = new ProgressMonitor(SwingUtilities.getWindowAncestor((Component)e.getSource()), "Converting!", "", 0, 100);
+                    convertButton.setEnabled(false);
+                    progressBar.setVisible(true);
+                    frame.pack();
 
                     new SwingWorker<Void, Void>(){
                         @Override
                         protected Void doInBackground() throws Exception {
-                            GraphSolver.convert(inputFile.getPath(), outputTrack, outputPng, progressMonitor);
+                            GraphSolver.convert(inputFile.getPath(), outputTrack, outputPng, progressBar);
 
                             return null;
                         }
 
                         @Override
                         protected void done() {
-                            progressMonitor.close();
+                            convertButton.setEnabled(true);
+                            progressBar.setVisible(false);
 
-                            JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor((Component)e.getSource()), "File Converted!");
+                            JOptionPane.showMessageDialog(frame, "File Converted!");
                         }
                     }.execute();
                 }
                 catch (Exception exception){
                     exception.printStackTrace();
 
-                    JOptionPane.showMessageDialog(SwingUtilities.getWindowAncestor((Component)e.getSource()), exception.getMessage());
+                    JOptionPane.showMessageDialog(frame, exception.getMessage());
                 }
             }
         });
@@ -107,6 +126,8 @@ public class SisyphusForTheRestOfUs {
                 System.exit(0);
             }
         });
+
+        exitButton.setFocusable(false);
 
         JPanel p = new JPanel();
         p.add(convertButton);

@@ -149,7 +149,7 @@ public class GraphSolver {
 
             if (percentage!=lastPercentage){
                 System.err.println(percentage + "%");
-                progressMonitor.setProgress(percentage);
+                progressBar.setValue(percentage);
 
                 lastPercentage=percentage;
             }
@@ -524,10 +524,10 @@ public class GraphSolver {
     static HashMap<String, Path> pathList = new HashMap<String, Path>();
     static ArrayList<Point> answerPoints = new ArrayList<Point>();
 
-    static ProgressMonitor progressMonitor;
+    static JProgressBar progressBar;
 
-    public static void convert(String inputFile, String outputFileTHR, String outputFilePNG, ProgressMonitor progressMonitor) throws Exception {
-        GraphSolver.progressMonitor=progressMonitor;
+    public static void convert(String inputFile, String outputFileTHR, String outputFilePNG, JProgressBar progressBar) throws Exception {
+        GraphSolver.progressBar=progressBar;
 
         BufferedReader in = new BufferedReader(new FileReader(inputFile));
 
