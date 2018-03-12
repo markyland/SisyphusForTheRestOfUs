@@ -620,7 +620,6 @@ public class GraphSolver {
 
         Path maxHypotPath=null;
         int maxHypotPointIndex=-1;
-        Point maxHypotPoint=null;
         for (Path path : pathList.values()){
             for (int i=0; i<path.pathVertices.size(); i++){
                 Point point = path.pathVertices.get(i);
@@ -629,7 +628,6 @@ public class GraphSolver {
                     maxHypot=Math.hypot(point.x, point.y);
                     maxHypotPath=path;
                     maxHypotPointIndex=i;
-                    maxHypotPoint=point;
                 }
             }
         }
@@ -659,27 +657,27 @@ public class GraphSolver {
         GraphSolver G = new GraphSolver(vertices.size() + 1);
 
         int verticeId;
-        Point endPoint;
+
+        pathVertices = new ArrayList<>();
 
         if (maxHypotPointIndex==0){
             verticeId=maxHypotPath.toV;
-            endPoint=maxHypotPath.pathVertices.get(maxHypotPath.pathVertices.size()-1);
+
+            pathVertices.addAll(maxHypotPath.pathVertices);
         }
         else{
             verticeId=maxHypotPath.fromV;
-            endPoint=maxHypotPath.pathVertices.get(0);
+
+            for (int i=maxHypotPointIndex; i>=0; i--){
+                pathVertices.add(maxHypotPath.pathVertices.get(i));
+            }
         }
 
-        pathVertices = new ArrayList<>();
-        pathVertices.add(new Point(maxHypotPoint.x, maxHypotPoint.y));
-        pathVertices.add(endPoint);
-        G.addArc("start", 0, verticeId, 0);
         pathList.put("start", new Path("start", 0, verticeId, pathVertices));
 
         reversePathVertices=new ArrayList<>(pathVertices);
         Collections.reverse(reversePathVertices);
-        G.addArc("revStart", verticeId, 0, 0);
-        pathList.put("revStart", new Path("start", verticeId, 0, reversePathVertices));
+        pathList.put("revStart", new Path("revStart", verticeId, 0, reversePathVertices));
 
         for (Path path : pathList.values()){
             //System.err.println(path);
@@ -709,6 +707,8 @@ public class GraphSolver {
 
                 for (Point point : points){
                     com.slightlyloony.jsisyphus.Point dest = com.slightlyloony.jsisyphus.Point.fromXY(point.x, point.y);
+
+                    //System.err.println(point.x+","+point.y);
 
                     dc.lineTo(dc.getCurrentRelativePosition().vectorTo(dest));
                 }
