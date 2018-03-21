@@ -13,13 +13,13 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class Spiral7 {
+public class Spiral8 {
 
-    public Spiral7() throws Exception {
+    public Spiral8() throws Exception {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
-                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\words.png");
+                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\words2.png");
 
                 Image img = icon.getImage();
 
@@ -62,11 +62,13 @@ public class Spiral7 {
 
                 double eraseSpace=0.0125;
 
-                double rho=0;
+                double rho=.01;
                 double theta=0;//dc.getCurrentPosition().getTheta();
 
+                int count=0;
+
                 while (rho+eraseSpace<1){
-                    theta+=.1*(1-rho);
+                    theta+=.015/rho;
 
                     rho=theta / (2 * Math.PI) * (eraseSpace);
 
@@ -90,12 +92,16 @@ public class Spiral7 {
                     dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho, theta)));
 
                     if (isActive){
-                        //  dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho+eraseSpace, theta)));
+                        count++;
+
+                        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho+2*eraseSpace, theta)));
                         dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho-2*eraseSpace, theta)));
                         dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho, theta)));
                     }
                 }
 
+                System.err.println("ticks : " + count);
+                
                 dc.renderPNG( "c:\\users\\mark\\desktop\\waky.png" );
                 dc.write( "c:\\users\\mark\\desktop\\waky.thr" );
 
@@ -105,6 +111,6 @@ public class Spiral7 {
     }
 
     public static void main(String args[]) throws Exception {
-        Spiral7 me = new Spiral7();
+        Spiral8 me = new Spiral8();
     }
 }
