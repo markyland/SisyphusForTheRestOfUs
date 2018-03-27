@@ -19,7 +19,7 @@ public class Spiral7 {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
-                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\words.png");
+                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\marilyn2.png");
 
                 Image img = icon.getImage();
 
@@ -60,24 +60,16 @@ public class Spiral7 {
 //                dc.setEraseSpacing(0.005);
 //                dc.eraseTo(Point.fromRT(1, startTheta));
 
-                double eraseSpace=0.0125;
+                double eraseSpace=0.008;
 
-                double rho=0;
+                double rho=.01;
                 double theta=0;//dc.getCurrentPosition().getTheta();
 
+                int count=0;
                 while (rho+eraseSpace<1){
-                    theta+=.1*(1-rho);
+                    theta+=.025/rho;
 
                     rho=theta / (2 * Math.PI) * (eraseSpace);
-
-                    //------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-//                    double wiggleAmount=3;
-//                    double frequency=10;
-//
-//                    rho+=wiggleAmount * Math.sin(theta*frequency) * eraseSpace;
-
-                    //------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
                     Point point = Point.fromRT(rho, theta);
 
@@ -90,11 +82,15 @@ public class Spiral7 {
                     dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho, theta)));
 
                     if (isActive){
+                        count++;
+
                         //  dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho+eraseSpace, theta)));
                         dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho-2*eraseSpace, theta)));
                         dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho, theta)));
                     }
                 }
+
+                System.err.println(count);
 
                 dc.renderPNG( "c:\\users\\mark\\desktop\\waky.png" );
                 dc.write( "c:\\users\\mark\\desktop\\waky.thr" );

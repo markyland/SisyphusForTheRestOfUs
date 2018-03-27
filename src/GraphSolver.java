@@ -526,7 +526,7 @@ public class GraphSolver {
 
     static JProgressBar progressBar;
 
-    public static void convert(String inputFile, String outputFileTHR, String outputFilePNG, JProgressBar progressBar) throws Exception {
+    public static void convert(String inputFile, String outputFileTHR, String outputFilePNG, boolean addErase, JProgressBar progressBar) throws Exception {
         vertices.clear();
         currentVertice=1;
         pathList.clear();
@@ -693,17 +693,20 @@ public class GraphSolver {
 //            System.err.println(point.x + "," + point.y);
 //        }
 
-        plot(outputFileTHR, outputFilePNG, answerPoints);
+        plot(outputFileTHR, outputFilePNG, answerPoints, addErase);
 
         // System.out.println("Cost = " + G.cost());
     }
 
-    private static void plot(final String outputFileTHR, final String outputFilePNG, final List<Point> points) throws Exception {
+    private static void plot(final String outputFileTHR, final String outputFilePNG, final List<Point> points, final boolean addErase) throws Exception {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
                 dc.setEraseSpacing(0.005);
-                dc.eraseTo(com.slightlyloony.jsisyphus.Point.fromXY(points.get(0).x, points.get(0).y));
+
+                if (addErase) {
+                    dc.eraseTo(com.slightlyloony.jsisyphus.Point.fromXY(points.get(0).x, points.get(0).y));
+                }
 
                 for (Point point : points){
                     com.slightlyloony.jsisyphus.Point dest = com.slightlyloony.jsisyphus.Point.fromXY(point.x, point.y);

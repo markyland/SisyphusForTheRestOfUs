@@ -79,14 +79,14 @@ public class Spiral9 {
 
                     //wiggle=1, freq=100, eraseSpace=0.0125  //nice medium color
 
-                    double wiggleAmount=(1-x-.5)*3+1;
-                    double frequency=100;
+                    double wiggleAmount=(1-x-.5)*2.5+1;
+                    double frequency=y>0 ? 100 : 150;
 
                     double optionAllRho=wiggleAmount * Math.sin(theta*frequency*rho) * eraseSpace;
                     //double optionAllRho=2.5 * eraseSpace;
 
-                    //boolean isActive=x>-.5 && x<.5 && y>-.5 && y<.5;
-                    boolean isActive=pixels[(int)Math.round(500-500*(y/2+.5))][(int)Math.round(500*(x/2+.5))]==1;
+                    boolean isActive=y>-.3 && y<.3;
+                    //boolean isActive=pixels[(int)Math.round(500-500*(y/2+.5))][(int)Math.round(500*(x/2+.5))]==1;
 
                     double additionalRho=isActive ? optionAllRho : 0;
 

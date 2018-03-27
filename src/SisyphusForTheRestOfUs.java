@@ -70,6 +70,9 @@ public class SisyphusForTheRestOfUs {
     }
 
     private JPanel createButtonPanel(){
+        final JCheckBox addEraseChB = new JCheckBox("Add Erase", true);
+        addEraseChB.setFocusable(false);
+
         final JButton convertButton = new JButton("Convert!");
         convertButton.setFocusable(false);
 
@@ -111,7 +114,7 @@ public class SisyphusForTheRestOfUs {
                         @Override
                         protected Void doInBackground() throws Exception {
                             try{
-                                GraphSolver.convert(inputFile.getPath(), outputTrack.getPath(), outputPng.getPath(), progressBar);
+                                GraphSolver.convert(inputFile.getPath(), outputTrack.getPath(), outputPng.getPath(), addEraseChB.isSelected(), progressBar);
                             }
                             catch (Throwable exception){
                                 exception.printStackTrace();
@@ -163,6 +166,8 @@ public class SisyphusForTheRestOfUs {
         exitButton.setFocusable(false);
 
         JPanel p = new JPanel();
+        p.add(addEraseChB);
+        p.add(new JLabel("   "));
         p.add(convertButton);
         p.add(exitButton);
 
