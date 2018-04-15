@@ -1,3 +1,5 @@
+package research;
+
 import com.slightlyloony.jsisyphus.ATrack;
 import com.slightlyloony.jsisyphus.Point;
 
@@ -13,13 +15,13 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class Spiral9 {
+public class Spiral7 {
 
-    public Spiral9() throws Exception {
+    public Spiral7() throws Exception {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
-                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\fade.png");
+                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\marilyn2.png");
 
                 Image img = icon.getImage();
 
@@ -62,11 +64,12 @@ public class Spiral9 {
 
                 double eraseSpace=0.008;
 
-                double rho=0;
+                double rho=.01;
                 double theta=0;//dc.getCurrentPosition().getTheta();
 
+                int count=0;
                 while (rho+eraseSpace<1){
-                    theta+=.01;
+                    theta+=.025/rho;
 
                     rho=theta / (2 * Math.PI) * (eraseSpace);
 
@@ -75,27 +78,21 @@ public class Spiral9 {
                     double x=point.x;
                     double y=point.y;
 
-                    //System.err.println(Math.sin(theta));
+                    //boolean isActive=x>-.5 && x<.5 && y>-.5 && y<.5;
+                    boolean isActive=pixels[(int)Math.round(500-500*(y/2+.5))][(int)Math.round(500*(x/2+.5))]==1;
 
-                    //wiggle=1, freq=100, eraseSpace=0.0125  //nice medium color
+                    dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho, theta)));
 
-                    double wiggleAmount=(1-x-.5)*2.5+1;
-                    double frequency=y>0 ? 100 : 150;
+                    if (isActive){
+                        count++;
 
-                    double optionAllRho=wiggleAmount * Math.sin(theta*frequency*rho) * eraseSpace;
-                    //double optionAllRho=2.5 * eraseSpace;
-
-                    boolean isActive=y>-.3 && y<.3;
-                    //boolean isActive=pixels[(int)Math.round(500-500*(y/2+.5))][(int)Math.round(500*(x/2+.5))]==1;
-
-                    double additionalRho=isActive ? optionAllRho : 0;
-
-                    Point dest = Point.fromRT(rho+additionalRho, theta);
-
-                    //System.err.println(point.x+","+point.y);
-
-                    dc.lineTo(dc.getCurrentRelativePosition().vectorTo(dest));
+                        //  dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho+eraseSpace, theta)));
+                        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho-2*eraseSpace, theta)));
+                        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho, theta)));
+                    }
                 }
+
+                System.err.println(count);
 
                 dc.renderPNG( "c:\\users\\mark\\desktop\\waky.png" );
                 dc.write( "c:\\users\\mark\\desktop\\waky.thr" );
@@ -106,6 +103,6 @@ public class Spiral9 {
     }
 
     public static void main(String args[]) throws Exception {
-        Spiral9 me = new Spiral9();
+        Spiral7 me = new Spiral7();
     }
 }

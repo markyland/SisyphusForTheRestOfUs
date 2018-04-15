@@ -1,4 +1,4 @@
-/**
+package v1; /**
  * Created by IntelliJ IDEA.
  * User: mark
  * Date: 2/24/18
@@ -6,10 +6,8 @@
  */
 
 import com.slightlyloony.jsisyphus.*;
-import com.slightlyloony.jsisyphus.Point;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.*;
 import java.util.*;
 import java.util.List;

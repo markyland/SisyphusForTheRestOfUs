@@ -1,3 +1,5 @@
+package research;
+
 import com.slightlyloony.jsisyphus.ATrack;
 import com.slightlyloony.jsisyphus.Point;
 
@@ -7,17 +9,15 @@ import java.awt.image.ImageObserver;
 import java.awt.image.PixelGrabber;
 import java.io.IOException;
 
-import static java.lang.Math.round;
-
 /**
  * Created by IntelliJ IDEA.
  * User: mark
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class Spiral3 {
+public class Spiral8 {
 
-    public Spiral3() throws Exception {
+    public Spiral8() throws Exception {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
@@ -62,43 +62,48 @@ public class Spiral3 {
 //                dc.setEraseSpacing(0.005);
 //                dc.eraseTo(Point.fromRT(1, startTheta));
 
-                double eraseSpace=0.008;
+                double eraseSpace=0.0125;
 
-                double rho=0;
+                double rho=.01;
                 double theta=0;//dc.getCurrentPosition().getTheta();
 
+                int count=0;
+
                 while (rho+eraseSpace<1){
-                    theta+=.01;
+                    theta+=.015/rho;
 
                     rho=theta / (2 * Math.PI) * (eraseSpace);
+
+                    //------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//                    double wiggleAmount=3;
+//                    double frequency=10;
+//
+//                    rho+=wiggleAmount * Math.sin(theta*frequency) * eraseSpace;
+
+                    //------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
                     Point point = Point.fromRT(rho, theta);
 
                     double x=point.x;
                     double y=point.y;
 
-                    //System.err.println(Math.sin(theta));
-
-                    //wiggle=1, freq=100, eraseSpace=0.0125  //nice medium color
-
-                    double wiggleAmount=2;
-                    double frequency=100;
-
-                    double optionAllRho=wiggleAmount * Math.sin(theta*frequency*rho) * eraseSpace;
-                    //double optionAllRho=2.5 * eraseSpace;
-
                     //boolean isActive=x>-.5 && x<.5 && y>-.5 && y<.5;
                     boolean isActive=pixels[(int)Math.round(500-500*(y/2+.5))][(int)Math.round(500*(x/2+.5))]==1;
 
-                    double additionalRho=isActive ? optionAllRho : 0;
+                    dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho, theta)));
 
-                    Point dest = Point.fromRT(rho+additionalRho, theta);
+                    if (isActive){
+                        count++;
 
-                    //System.err.println(point.x+","+point.y);
-
-                    dc.lineTo(dc.getCurrentRelativePosition().vectorTo(dest));
+                        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho+2*eraseSpace, theta)));
+                        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho-2*eraseSpace, theta)));
+                        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromRT(rho, theta)));
+                    }
                 }
 
+                System.err.println("ticks : " + count);
+                
                 dc.renderPNG( "c:\\users\\mark\\desktop\\waky.png" );
                 dc.write( "c:\\users\\mark\\desktop\\waky.thr" );
 
@@ -108,6 +113,6 @@ public class Spiral3 {
     }
 
     public static void main(String args[]) throws Exception {
-        Spiral3 me = new Spiral3();
+        Spiral8 me = new Spiral8();
     }
 }

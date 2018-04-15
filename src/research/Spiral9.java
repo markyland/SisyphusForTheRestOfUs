@@ -1,3 +1,5 @@
+package research;
+
 import com.slightlyloony.jsisyphus.ATrack;
 import com.slightlyloony.jsisyphus.Point;
 
@@ -13,9 +15,9 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class Spiral91 {
+public class Spiral9 {
 
-    public Spiral91() throws Exception {
+    public Spiral9() throws Exception {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
@@ -79,13 +81,13 @@ public class Spiral91 {
 
                     //wiggle=1, freq=100, eraseSpace=0.0125  //nice medium color
 
-                    double wiggleAmount=Math.max(0, ((theta%(Math.PI))/Math.PI)* 2.8-.2);
-                    double frequency=125;
+                    double wiggleAmount=(1-x-.5)*2.5+1;
+                    double frequency=y>0 ? 100 : 150;
 
                     double optionAllRho=wiggleAmount * Math.sin(theta*frequency*rho) * eraseSpace;
                     //double optionAllRho=2.5 * eraseSpace;
 
-                    boolean isActive=rho>.25 &&  rho<.75;
+                    boolean isActive=y>-.3 && y<.3;
                     //boolean isActive=pixels[(int)Math.round(500-500*(y/2+.5))][(int)Math.round(500*(x/2+.5))]==1;
 
                     double additionalRho=isActive ? optionAllRho : 0;
@@ -106,6 +108,6 @@ public class Spiral91 {
     }
 
     public static void main(String args[]) throws Exception {
-        Spiral91 me = new Spiral91();
+        Spiral9 me = new Spiral9();
     }
 }

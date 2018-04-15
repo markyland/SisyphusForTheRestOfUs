@@ -1,3 +1,7 @@
+package util;
+
+import util.Point;
+
 import java.util.*;
 
 /**

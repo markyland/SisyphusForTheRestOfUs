@@ -1,10 +1,9 @@
-import javax.imageio.*;
+package v1;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.*;
 import java.io.*;
-import java.util.*;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,7 +20,7 @@ public class SisyphusForTheRestOfUs {
     public SisyphusForTheRestOfUs(){
         JPanel panel = new JPanel(new BorderLayout());
 
-        panel.add(new JLabel(new ImageIcon(getClass().getResource("header.png"))), BorderLayout.NORTH);
+        panel.add(new JLabel(new ImageIcon(getClass().getResource("/header.png"))), BorderLayout.NORTH);
         panel.add(createMainPanel(), BorderLayout.CENTER);
         panel.add(createButtonPanel(), BorderLayout.SOUTH);
 
@@ -31,7 +30,7 @@ public class SisyphusForTheRestOfUs {
         frame.pack();
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
-        frame.setIconImage(new ImageIcon(getClass().getResource("icon.png")).getImage());
+        frame.setIconImage(new ImageIcon(getClass().getResource("/icon.png")).getImage());
         frame.setVisible(true);
     }
 

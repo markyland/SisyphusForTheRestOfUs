@@ -1,10 +1,8 @@
+package research;
+
 import com.slightlyloony.jsisyphus.ATrack;
 import com.slightlyloony.jsisyphus.Point;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.ImageObserver;
-import java.awt.image.PixelGrabber;
 import java.io.IOException;
 
 /**

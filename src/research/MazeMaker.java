@@ -1,13 +1,7 @@
-import com.slightlyloony.jsisyphus.ATrack;
-import com.slightlyloony.jsisyphus.Point;
+package research;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 
 /**
  * Created by IntelliJ IDEA.

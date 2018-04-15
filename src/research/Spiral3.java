@@ -1,3 +1,5 @@
+package research;
+
 import com.slightlyloony.jsisyphus.ATrack;
 import com.slightlyloony.jsisyphus.Point;
 
@@ -7,19 +9,21 @@ import java.awt.image.ImageObserver;
 import java.awt.image.PixelGrabber;
 import java.io.IOException;
 
+import static java.lang.Math.round;
+
 /**
  * Created by IntelliJ IDEA.
  * User: mark
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class Spiral6 {
+public class Spiral3 {
 
-    public Spiral6() throws Exception {
+    public Spiral3() throws Exception {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
-                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\question.png");
+                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\words2.png");
 
                 Image img = icon.getImage();
 
@@ -60,7 +64,7 @@ public class Spiral6 {
 //                dc.setEraseSpacing(0.005);
 //                dc.eraseTo(Point.fromRT(1, startTheta));
 
-                double eraseSpace=0.0125;
+                double eraseSpace=0.008;
 
                 double rho=0;
                 double theta=0;//dc.getCurrentPosition().getTheta();
@@ -68,43 +72,30 @@ public class Spiral6 {
                 while (rho+eraseSpace<1){
                     theta+=.01;
 
-                    com.slightlyloony.jsisyphus.Point dest;
+                    rho=theta / (2 * Math.PI) * (eraseSpace);
 
-                    if (rho>.75){
-                        theta+=1;
-                        rho=theta / (2 * Math.PI) * (0.005 / .4);
+                    Point point = Point.fromRT(rho, theta);
 
-                        dest = com.slightlyloony.jsisyphus.Point.fromRT(rho, theta);
-                    }
-                    else {
-                        rho = theta / (2 * Math.PI) * (eraseSpace);
+                    double x=point.x;
+                    double y=point.y;
 
-                        Point point = Point.fromRT(rho, theta);
+                    //System.err.println(Math.sin(theta));
 
-                        double x = point.x;
-                        double y = point.y;
+                    //wiggle=1, freq=100, eraseSpace=0.0125  //nice medium color
 
-                        //System.err.println(Math.sin(theta));
+                    double wiggleAmount=2;
+                    double frequency=100;
 
-                        //wiggle=1, freq=100, eraseSpace=0.0125  //nice medium color
+                    double optionAllRho=wiggleAmount * Math.sin(theta*frequency*rho) * eraseSpace;
+                    //double optionAllRho=2.5 * eraseSpace;
 
-                        double wiggleAmount = 3;
-                        double frequency = 10;
+                    //boolean isActive=x>-.5 && x<.5 && y>-.5 && y<.5;
+                    boolean isActive=pixels[(int)Math.round(500-500*(y/2+.5))][(int)Math.round(500*(x/2+.5))]==1;
 
-                        //double optionAllRho=wiggleAmount * Math.sin(theta*frequency*rho) * eraseSpace;
-                        double optionAllRho = wiggleAmount * Math.sin(theta * frequency) * eraseSpace;
-                        //double optionAllRho=2.5 * eraseSpace;
+                    double additionalRho=isActive ? optionAllRho : 0;
 
-                        boolean isActive = true;//x>-.5 && x<.5 && y>-.5 && y<.5;
-                        //boolean isActive=pixels[(int)Math.round(500-500*(y/2+.5))][(int)Math.round(500*(x/2+.5))]==1;
+                    Point dest = Point.fromRT(rho+additionalRho, theta);
 
-                        double additionalRho = isActive ? optionAllRho : 0;
-
-                        System.err.println(additionalRho);
-                        //  double additionalRho=Math.sin(theta*5) * eraseSpace;
-
-                        dest = Point.fromRT(rho + additionalRho, theta);
-                    }
                     //System.err.println(point.x+","+point.y);
 
                     dc.lineTo(dc.getCurrentRelativePosition().vectorTo(dest));
@@ -119,6 +110,6 @@ public class Spiral6 {
     }
 
     public static void main(String args[]) throws Exception {
-        Spiral6 me = new Spiral6();
+        Spiral3 me = new Spiral3();
     }
 }

@@ -1,3 +1,7 @@
+package research;
+
+import util.Path;
+
 import javax.imageio.*;
 import javax.swing.*;
 import java.awt.*;
