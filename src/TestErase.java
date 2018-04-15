@@ -15,16 +15,13 @@ public class TestErase {
 
     private static double PI2=Math.PI*2;
 
-    private static double theta=0;
-    private static double rho=0;
-
     public static void main(String args[]) throws Exception {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
                 dc.setEraseSpacing(0.0125);
 
-                eraseToManually(dc, com.slightlyloony.jsisyphus.Point.fromRT(1, 0), true);
+                Util.eraseToManually(dc, com.slightlyloony.jsisyphus.Point.fromRT(1, 0), true);
 
                 eraseAndCircle(dc, .65, 330, .15);
                 eraseAndCircle(dc, .65, 300, .15);
@@ -76,7 +73,7 @@ public class TestErase {
 //                eraseAndCircle(dc, .2, 0, .3);
 //                eraseAndCircle(dc, .19, 180, .3);
 
-                eraseToManually(dc, com.slightlyloony.jsisyphus.Point.fromRT(.005, 0), false);
+                Util.eraseToManually(dc, com.slightlyloony.jsisyphus.Point.fromRT(.005, 0), false);
 
 //                com.slightlyloony.jsisyphus.Point dest = com.slightlyloony.jsisyphus.Point.fromXY(0, 0);
 //                dc.lineTo(dc.getCurrentRelativePosition().vectorTo(dest));
@@ -90,55 +87,16 @@ public class TestErase {
     }
 
     private static void eraseAndCircle(DrawingContext dc, double rho, double degrees, double size){
-        eraseToManually(dc, com.slightlyloony.jsisyphus.Point.fromRT(rho, Math.toRadians(degrees)), false);
+        Util.eraseToManually(dc, com.slightlyloony.jsisyphus.Point.fromRT(rho, Math.toRadians(degrees)), false);
 
         double eraseSpace=dc.getEraseSpacing();
 
-        double curRho=dc.getCurrentRelativePosition().rho;
+        double curRho=dc.getCurrentPosition().getRho();
+        double curTheta=dc.getCurrentPosition().getTheta();
 
-        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(com.slightlyloony.jsisyphus.Point.fromRT(curRho+eraseSpace*1.5, theta)));
+        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(com.slightlyloony.jsisyphus.Point.fromRT(curRho+eraseSpace*1.5, curTheta)));
         dc.arcAroundRT(size, Math.toRadians(degrees), PI2);
-        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(com.slightlyloony.jsisyphus.Point.fromRT(curRho, theta)));
-    }
-
-    private static void eraseToManually(DrawingContext dc, com.slightlyloony.jsisyphus.Point point, boolean isOut){
-        double eraseSpace=dc.getEraseSpacing();
-
-        if (rho==0){
-            rho=0.005;      //don't want divide by 0
-        }
-
-        System.err.println(isOut);
-
-        double turnAmount=.1;
-
-        while ((isOut ? (rho<=point.rho && rho<=1) : (rho>=point.rho && rho>=0))) {
-            theta = theta + (isOut ? 1 : -1) * turnAmount;
-
-            rho = theta / (2 * Math.PI) * eraseSpace;
-
-            dc.lineTo(dc.getCurrentRelativePosition().vectorTo(com.slightlyloony.jsisyphus.Point.fromRT(rho, theta)));
-        }
-
-        double thetaLeft=theta%PI2 > point.theta ? theta%PI2-point.theta : theta%PI2-point.theta+PI2;
-        thetaLeft=(int)(thetaLeft/turnAmount)*turnAmount;
-
-        while (thetaLeft>0) {
-            theta = theta + (isOut ? 1 : -1) * turnAmount;
-
-            rho = theta / (2 * Math.PI) * eraseSpace;
-
-            dc.lineTo(dc.getCurrentRelativePosition().vectorTo(com.slightlyloony.jsisyphus.Point.fromRT(rho, theta)));
-
-            thetaLeft=theta%PI2 > point.theta ? theta%PI2-point.theta : theta%PI2-point.theta+PI2;
-            thetaLeft=(int)(thetaLeft/turnAmount)*.1;
-        }
-
-        theta=(int)(theta/PI2)*PI2  + point.theta;
-
-        rho = theta / (2 * Math.PI) * eraseSpace;
-
-        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(com.slightlyloony.jsisyphus.Point.fromRT(rho, theta)));
+        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(com.slightlyloony.jsisyphus.Point.fromRT(curRho, curTheta)));
     }
 }
 
