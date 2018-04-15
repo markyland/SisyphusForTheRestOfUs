@@ -6,7 +6,7 @@ package v2; /**
  */
 
 import com.slightlyloony.jsisyphus.ATrack;
-import util.Util;
+import util.SisyphusUtil;
 
 import javax.swing.*;
 import java.io.BufferedReader;
@@ -208,10 +208,10 @@ public class GraphSolver2 {
                 dc.setEraseSpacing(0.005);
 
                 if (addErase) {
-                    Util.eraseToManually(dc, com.slightlyloony.jsisyphus.Point.fromRT(1, 0), true);
+                    SisyphusUtil.eraseToManually(dc, com.slightlyloony.jsisyphus.Point.fromRT(1, 0), true);
                 }
 
-                Util.eraseToManually(dc, com.slightlyloony.jsisyphus.Point.fromXY(points.get(0).x, points.get(0).y), false);
+                SisyphusUtil.eraseToManually(dc, com.slightlyloony.jsisyphus.Point.fromXY(points.get(0).x, points.get(0).y), false);
 
                 for (Point point : points){
                     com.slightlyloony.jsisyphus.Point dest = com.slightlyloony.jsisyphus.Point.fromXY(point.x, point.y);

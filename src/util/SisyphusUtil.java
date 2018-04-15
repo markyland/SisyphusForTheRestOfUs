@@ -8,7 +8,7 @@ import com.slightlyloony.jsisyphus.DrawingContext;
  * Date: 4/15/2018
  * Time: 6:18 PM
  */
-public class Util {
+public class SisyphusUtil {
 
     private static double PI2=Math.PI*2;
 

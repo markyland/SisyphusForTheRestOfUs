@@ -7,7 +7,7 @@ package research; /**
 
 import com.slightlyloony.jsisyphus.ATrack;
 import com.slightlyloony.jsisyphus.DrawingContext;
-import util.Util;
+import util.SisyphusUtil;
 
 import java.io.IOException;
 
@@ -22,7 +22,7 @@ public class TestErase {
             protected void trace() throws IOException {
                 dc.setEraseSpacing(0.0125);
 
-                Util.eraseToManually(dc, com.slightlyloony.jsisyphus.Point.fromRT(1, 0), true);
+                SisyphusUtil.eraseToManually(dc, com.slightlyloony.jsisyphus.Point.fromRT(1, 0), true);
 
                 eraseAndCircle(dc, .65, 330, .15);
                 eraseAndCircle(dc, .65, 300, .15);
@@ -74,7 +74,7 @@ public class TestErase {
 //                eraseAndCircle(dc, .2, 0, .3);
 //                eraseAndCircle(dc, .19, 180, .3);
 
-                Util.eraseToManually(dc, com.slightlyloony.jsisyphus.Point.fromRT(.005, 0), false);
+                SisyphusUtil.eraseToManually(dc, com.slightlyloony.jsisyphus.Point.fromRT(.005, 0), false);
 
 //                com.slightlyloony.jsisyphus.Point dest = com.slightlyloony.jsisyphus.Point.fromXY(0, 0);
 //                dc.lineTo(dc.getCurrentRelativePosition().vectorTo(dest));
@@ -88,7 +88,7 @@ public class TestErase {
     }
 
     private static void eraseAndCircle(DrawingContext dc, double rho, double degrees, double size){
-        Util.eraseToManually(dc, com.slightlyloony.jsisyphus.Point.fromRT(rho, Math.toRadians(degrees)), false);
+        SisyphusUtil.eraseToManually(dc, com.slightlyloony.jsisyphus.Point.fromRT(rho, Math.toRadians(degrees)), false);
 
         double eraseSpace=dc.getEraseSpacing();
 
