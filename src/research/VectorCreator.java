@@ -15,7 +15,7 @@ import java.util.*;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class SisyphusForTheRestOfUs2 {
+public class VectorCreator {
 
     public void process(){
         ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\flower.png");
@@ -106,7 +106,7 @@ public class SisyphusForTheRestOfUs2 {
     }
 
     public static void main(String args[]){
-        SisyphusForTheRestOfUs2 me = new SisyphusForTheRestOfUs2();
+        VectorCreator me = new VectorCreator();
 
         me.process();
     }
