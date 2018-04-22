@@ -4,9 +4,6 @@ import com.slightlyloony.jsisyphus.ATrack;
 import com.slightlyloony.jsisyphus.Point;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.image.ImageObserver;
-import java.awt.image.PixelGrabber;
 import java.io.IOException;
 
 /**
@@ -15,9 +12,9 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class Spiral4 {
+public class WakySpiral {
 
-    public Spiral4() throws Exception {
+    public WakySpiral() throws Exception {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
@@ -81,6 +78,6 @@ public class Spiral4 {
     }
 
     public static void main(String args[]) throws Exception {
-        Spiral4 me = new Spiral4();
+        WakySpiral me = new WakySpiral();
     }
 }
