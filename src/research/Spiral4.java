@@ -23,41 +23,6 @@ public class Spiral4 {
             protected void trace() throws IOException {
                 ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\question.png");
 
-                    Image img = icon.getImage();
-
-                    int width = img.getWidth(null);
-                    int height = img.getHeight(null);
-                    int[] pixels1D = new int[width * height];
-
-                    PixelGrabber pg = new PixelGrabber(img, 0, 0, width, height, pixels1D, 0, width);
-
-                    try {
-                        pg.grabPixels();
-                    }
-                    catch (InterruptedException e) {
-                        throw new IllegalStateException("Error: Interrupted Waiting for Pixels");
-                    }
-
-                    if ((pg.getStatus() & ImageObserver.ABORT) != 0) {
-                        throw new IllegalStateException("Error: Image Fetch Aborted");
-                    }
-
-                    //switch to 2 dim array
-                    int pixels[][] = new int[height][width];
-                    for (int y=0; y<height; y++){
-                        for (int x=0; x<width; x++){
-                            int val=pixels1D[y*width+x];
-
-                            int r=val >> 16 & 0xFF;
-                            int g=val >> 8 & 0xFF;
-                            int b=val & 0xFF;
-
-                            pixels[y][x]=(r+g+b)/3.0>128 ? 0 : 1;
-                        }
-                    }
-
-                    //------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 
 //                dc.setEraseSpacing(0.005);
 //                dc.eraseTo(Point.fromRT(1, startTheta));
