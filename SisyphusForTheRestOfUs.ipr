@@ -10,6 +10,16 @@
         <element id="module-output" name="SisyphusForTheRestOfUs" />
       </root>
     </artifact>
+    <artifact type="jar" name="GCodeToSisyphus.jar">
+      <output-path>$PROJECT_DIR$/out/artifacts/GCodeToSisyphus_jar</output-path>
+      <root id="archive" name="SisyphusForTheRestOfUs.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/src/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="SisyphusForTheRestOfUs" />
+        <element id="artifact" artifact-name="SisyphusForTheRestOfUs" />
+      </root>
+    </artifact>
   </component>
   <component name="CompilerConfiguration">
     <wildcardResourcePatterns>
@@ -28,7 +38,6 @@
   <component name="DependencyValidationManager">
     <option name="SKIP_IMPORT_STATEMENTS" value="false" />
   </component>
-  <component name="Encoding" useUTFGuessing="true" native2AsciiForPropertiesFiles="false" />
   <component name="InspectionProjectProfileManager">
     <profile version="1.0" is_locked="false">
       <option name="myName" value="Project Default" />
@@ -185,7 +194,7 @@
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" project-jdk-name="1.7" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_7" default="false" project-jdk-name="1.7" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/out" />
   </component>
   <component name="VcsDirectoryMappings">

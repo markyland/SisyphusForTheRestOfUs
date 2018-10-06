@@ -12,9 +12,9 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class WakySpiral2 {
+public class WakySpiral5 {
 
-    public WakySpiral2() throws Exception {
+    public WakySpiral5() throws Exception {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
@@ -43,14 +43,14 @@ public class WakySpiral2 {
 
                     //wiggle=1, freq=100, eraseSpace=0.0125  //nice medium color
 
-                    double wiggleAmount=3*(1-rho *rho *rho);
-                    double frequency=10;
+                    double wiggleAmount=3*(1-Math.abs(2*rho-1));
+                    double frequency=20;
 
                     //double optionAllRho=wiggleAmount * Math.sin(theta*frequency*rho) * eraseSpace;
-                    double optionAllRho=wiggleAmount * Math.sin(theta*frequency) * eraseSpace;
+                    double optionAllRho=wiggleAmount * Math.sin(theta*(rho+1)*frequency) * eraseSpace;
                     //double optionAllRho=2.5 * eraseSpace;
 
-                    boolean isActive=true;//x>-.5 && x<.5 && y>-.5 && y<.5;
+                    boolean isActive=((x+1)%.5)>(.5/2) ^ ((y+1)%.5)>(.5/2);
                     //boolean isActive=pixels[(int)Math.round(500-500*(y/2+.5))][(int)Math.round(500*(x/2+.5))]==1;
 
                     double additionalRho=isActive ? optionAllRho : 0;
@@ -78,6 +78,6 @@ public class WakySpiral2 {
     }
 
     public static void main(String args[]) throws Exception {
-        WakySpiral2 me = new WakySpiral2();
+        WakySpiral5 me = new WakySpiral5();
     }
 }

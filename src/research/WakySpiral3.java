@@ -12,9 +12,9 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class WakySpiral2 {
+public class WakySpiral3 {
 
-    public WakySpiral2() throws Exception {
+    public WakySpiral3() throws Exception {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
@@ -43,8 +43,8 @@ public class WakySpiral2 {
 
                     //wiggle=1, freq=100, eraseSpace=0.0125  //nice medium color
 
-                    double wiggleAmount=3*(1-rho *rho *rho);
-                    double frequency=10;
+                    double wiggleAmount=4*(1-Math.abs(2*rho-1));
+                    double frequency=15;
 
                     //double optionAllRho=wiggleAmount * Math.sin(theta*frequency*rho) * eraseSpace;
                     double optionAllRho=wiggleAmount * Math.sin(theta*frequency) * eraseSpace;
@@ -78,6 +78,6 @@ public class WakySpiral2 {
     }
 
     public static void main(String args[]) throws Exception {
-        WakySpiral2 me = new WakySpiral2();
+        WakySpiral3 me = new WakySpiral3();
     }
 }

@@ -22,7 +22,6 @@ public class Spiral8 {
             @Override
             protected void trace() throws IOException {
                 ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\words2.png");
-
                 Image img = icon.getImage();
 
                 int width = img.getWidth(null);
