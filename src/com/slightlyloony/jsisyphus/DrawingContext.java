@@ -455,7 +455,7 @@ public class DrawingContext {
         // draw a spiral line for each path we have...
         double cx = 0;
         double cy = 0;
-        for( int i = 1; i < vertices.size(); i++ ) {
+        for( int i = 2; i < vertices.size(); i++ ) {
 
             // get our from and to, and delta theta...
             Position fromPos = vertices.get( i - 1 );
@@ -487,7 +487,10 @@ public class DrawingContext {
                 cy += delta.y;
                 int xTo = pixelize( cx );
                 int yTo = pixelize( -cy );
-                g.drawLine( xFrom, yFrom, xTo, yTo );
+
+                if (i!=2) {
+                    g.drawLine(xFrom, yFrom, xTo, yTo);
+                }
                 xFrom = xTo;
                 yFrom = yTo;
             }
