@@ -21,7 +21,7 @@ public class Filler2 {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
-                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\palm2-table.png");
+                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\turkey-table.png");
 
                 Image img = icon.getImage();
 
@@ -91,30 +91,32 @@ public class Filler2 {
                     double wiggleAmount=3*(1-Math.abs(2*Math.pow(rho, 1.1)-1));
                     double frequency=20;
 
-                    double rho1=wiggleAmount * Math.sin(theta*frequency+theta/7.5) * eraseSpace;    //background
-                    double rho2=wiggleAmount/2 * Math.sin(theta*frequency*1.5) * eraseSpace;            //foreground
-                    double rho3=0;            //foreground
-                    double rho4=wiggleAmount * Math.sin(theta*frequency+theta/3) * eraseSpace;   //wiggleAmount * Math.sin(theta*rho*frequency*2) * eraseSpace;
-                    double rho5=wiggleAmount*1.3 * (Math.abs(((theta*frequency*4)%(Math.PI*2))/(2*Math.PI)*4-2)-1) * eraseSpace;
+                    double rhoRed=wiggleAmount/2 * Math.sin(theta*frequency*1.5) * eraseSpace;    //background
+                    double rhoGreen=wiggleAmount * Math.sin(theta*frequency+theta/7.5) * eraseSpace;            //foreground
+                    double rhoBlue=wiggleAmount/2 * Math.sin(theta*frequency*2.3) * eraseSpace;            //foreground
+                    double rhoWhite=wiggleAmount * Math.sin(theta*frequency+theta/3) * eraseSpace;   //wiggleAmount * Math.sin(theta*rho*frequency*2) * eraseSpace;
+                    double whoBlack=0;
 
+//                    double rhoBlue=0;            //foreground
+//
                     int fillNumber=getFill(rho, theta, pixels, height, width);
 
                     double additionalRho=0;
 
                     if (fillNumber==0){
-                        additionalRho=rho5;
+                        additionalRho=rhoRed
                     }
                     else if (fillNumber==1){
-                        additionalRho=rho1;
+                        additionalRho=rhoGreen;
                     }
                     else if (fillNumber==2){
-                        additionalRho=rho2;
+                        additionalRho=rhoBlue;
                     }
                     else if (fillNumber==3){
-                        additionalRho=rho4;
+                        additionalRho=rhoWhite;
                     }
                     else if (fillNumber==4){
-                        additionalRho=rho3;
+                        additionalRho=whoBlack;
                     }
 
                     int fillNumber2=getFill(rho+additionalRho, theta, pixels, height, width);
@@ -134,10 +136,10 @@ public class Filler2 {
                     dc.lineTo(dc.getCurrentRelativePosition().vectorTo(dest));
                 }
 
-                dc.renderPNG( "c:\\users\\mark\\desktop\\waky.png" );
-                dc.write( "c:\\users\\mark\\desktop\\waky.thr" );
+                dc.renderPNG( "c:\\users\\mark\\desktop\\fill.png" );
+                dc.write( "c:\\users\\mark\\desktop\\fill.thr" );
 
-                Runtime.getRuntime().exec("cmd /C start c:\\users\\mark\\desktop\\waky.png");
+                Runtime.getRuntime().exec("cmd /C start c:\\users\\mark\\desktop\\fill.png");
             }
         }.trace();
     }
