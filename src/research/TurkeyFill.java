@@ -1,7 +1,9 @@
 package research;
 
 import com.slightlyloony.jsisyphus.ATrack;
+import com.slightlyloony.jsisyphus.DrawingContext;
 import com.slightlyloony.jsisyphus.Point;
+import util.SisyphusUtil;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,9 +17,11 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class Filler2 {
+public class TurkeyFill {
 
-    public Filler2() throws Exception {
+    double eraseSpace=0.0125;
+
+    public TurkeyFill() throws Exception {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
@@ -77,10 +81,10 @@ public class Filler2 {
 //                dc.setEraseSpacing(0.005);
 //                dc.eraseTo(Point.fromRT(1, startTheta));
 
-                double eraseSpace=0.0125;
-
                 double rho=0;
                 double theta=0;
+
+                boolean eyeDrawn=false;
 
                 while (true){
                     theta+=.01;
@@ -100,9 +104,8 @@ public class Filler2 {
                     double rhoWhite=0;   //wiggleAmount * Math.sin(theta*rho*frequency*2) * eraseSpace;
                     double rhoBlack=wiggleAmount/1.5 * Math.sin(theta*frequency*2.3) * eraseSpace;
                     double rhoGrey100=wiggleAmount * Math.sin(theta*frequency+theta/3) * eraseSpace;;
-
 //                    double rhoBlue=0;            //foreground
-//
+
                     int fillNumber=getFill(rho, theta, pixels, height, width);
 
                     double additionalRho=0;
@@ -141,6 +144,12 @@ public class Filler2 {
                     //System.err.println(point.x+","+point.y);
 
                     dc.lineTo(dc.getCurrentRelativePosition().vectorTo(dest));
+
+                    if (theta>351.93+2*Math.PI*2 && !eyeDrawn){
+                        eraseAndCircle(dc, .015);
+
+                        eyeDrawn=true;
+                    }
                 }
 
                 dc.renderPNG( "c:\\users\\mark\\desktop\\fill.png" );
@@ -149,6 +158,15 @@ public class Filler2 {
                 Runtime.getRuntime().exec("cmd /C start c:\\users\\mark\\desktop\\fill.png");
             }
         }.trace();
+    }
+
+    private void eraseAndCircle(DrawingContext dc, double size){
+        double curRho=dc.getCurrentPosition().getRho();
+        double curTheta=dc.getCurrentPosition().getTheta();
+
+        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(com.slightlyloony.jsisyphus.Point.fromRT(curRho-eraseSpace*1.5, curTheta)));
+        dc.arcAroundRT(size, curTheta+Math.PI, Math.PI*2);
+        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(com.slightlyloony.jsisyphus.Point.fromRT(curRho, curTheta)));
     }
 
     private int getFill(double rho, double theta, int[][] pixels, int height, int width){
@@ -161,6 +179,6 @@ public class Filler2 {
     }
 
     public static void main(String args[]) throws Exception {
-        Filler2 me = new Filler2();
+        TurkeyFill me = new TurkeyFill();
     }
 }
