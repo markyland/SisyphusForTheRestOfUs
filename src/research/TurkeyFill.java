@@ -25,7 +25,7 @@ public class TurkeyFill {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
-                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\turkey-table.png");
+                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\boris-table.png");
 
                 Image img = icon.getImage();
 
@@ -74,6 +74,18 @@ public class TurkeyFill {
                         else if (r==100 && g==100 && b==100){
                             pixels[y][x]=5;
                         }
+                        else if (r==200 && g==200 && b==200){
+                            pixels[y][x]=6;
+                        }
+                        else if (r==150 && g==150 && b==150){
+                            pixels[y][x]=7;
+                        }
+                        else if (r==50 && g==50 && b==50){
+                            pixels[y][x]=8;
+                        }
+                        else if (r==250 && g==250 && b==250){
+                            pixels[y][x]=9;
+                        }
                     }
                 }
 
@@ -84,7 +96,7 @@ public class TurkeyFill {
                 double rho=0;
                 double theta=0;
 
-                boolean eyeDrawn=false;
+                boolean eyeDrawn=true;
 
                 while (true){
                     theta+=.01;
@@ -99,11 +111,16 @@ public class TurkeyFill {
                     double frequency=20;
 
                     double rhoRed=wiggleAmount/2 * Math.sin(theta*frequency*2.1) * eraseSpace;    //background
-                    double rhoGreen=wiggleAmount * Math.sin(theta*frequency+theta/30) * eraseSpace;            //foreground
+                    double rhoGreen=wiggleAmount * Math.sin(theta*frequency+theta/15) * eraseSpace;            //foreground
                     double rhoBlue=wiggleAmount/2 * Math.sin(theta*frequency*1.5) * eraseSpace;            //foreground
                     double rhoWhite=0;   //wiggleAmount * Math.sin(theta*rho*frequency*2) * eraseSpace;
-                    double rhoBlack=wiggleAmount/1.5 * Math.sin(theta*frequency*2.3) * eraseSpace;
+                    double rhoBlack=wiggleAmount/1.2 * Math.pow(Math.sin(theta*frequency*2.3),2) * eraseSpace;//wiggleAmount/1.5 * Math.sin(theta*frequency*2.3) * eraseSpace;
                     double rhoGrey100=wiggleAmount * Math.sin(theta*frequency+theta/3) * eraseSpace;;
+                    double rhoGrey200=wiggleAmount*2 * Math.sin(theta*frequency % 5) * eraseSpace;;
+                    double rhoGrey150=wiggleAmount/2 * Math.sin(theta*frequency/1.5) * eraseSpace;    //background
+                    double rhoGrey50=wiggleAmount/2 * (Math.sin(theta*frequency)>0 ? 1 : -1) * eraseSpace;    //background
+                    double rhoGrey250=wiggleAmount/1.5 * Math.sin(Math.pow(theta, 1.005)*frequency) * eraseSpace;    //background
+
 //                    double rhoBlue=0;            //foreground
 
                     int fillNumber=getFill(rho, theta, pixels, height, width);
@@ -128,6 +145,18 @@ public class TurkeyFill {
                     else if (fillNumber==5){
                         additionalRho=rhoGrey100;
                     }
+                    else if (fillNumber==6){
+                        additionalRho=rhoGrey200;
+                    }
+                    else if (fillNumber==7){
+                        additionalRho=rhoGrey150;
+                    }
+                    else if (fillNumber==8){
+                        additionalRho=rhoGrey50;
+                    }
+                    else if (fillNumber==9){
+                        additionalRho=rhoGrey250;
+                    }
 
                     int fillNumber2=getFill(rho+additionalRho, theta, pixels, height, width);
 
@@ -145,8 +174,9 @@ public class TurkeyFill {
 
                     dc.lineTo(dc.getCurrentRelativePosition().vectorTo(dest));
 
-                    if (theta>351.93+2*Math.PI*2 && !eyeDrawn){
-                        eraseAndCircle(dc, .015);
+                    if (theta>351.93+Math.PI*2 && !eyeDrawn){
+                        eraseAndCircle(dc, .01);
+                        eraseAndCircle(dc, .01);
 
                         eyeDrawn=true;
                     }
@@ -164,7 +194,7 @@ public class TurkeyFill {
         double curRho=dc.getCurrentPosition().getRho();
         double curTheta=dc.getCurrentPosition().getTheta();
 
-        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(com.slightlyloony.jsisyphus.Point.fromRT(curRho-eraseSpace*1.5, curTheta)));
+        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(com.slightlyloony.jsisyphus.Point.fromRT(curRho-eraseSpace*2, curTheta)));
         dc.arcAroundRT(size, curTheta+Math.PI, Math.PI*2);
         dc.lineTo(dc.getCurrentRelativePosition().vectorTo(com.slightlyloony.jsisyphus.Point.fromRT(curRho, curTheta)));
     }
