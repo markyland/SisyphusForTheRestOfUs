@@ -32,7 +32,7 @@ public class TestFiller4 extends ATrack {
         for (int y=0; y<scale; y++){
             for (int x=0; x<scale; x++) {
                 gridY=y;
-                gridX=isBackwardsX() ? (((int)scale)-x-1) : x;
+                gridX=isBackwards() ? (((int)scale)-x-1) : x;
 
                 if ((gridY*scale+gridX)%2==0){
                     squareH(20);
@@ -59,15 +59,11 @@ public class TestFiller4 extends ATrack {
         point=Point.fromXY(-1, y);
         go(point);
 
-        while (true) {
+        for (int i=0; i<numRows/2; i++) {
             point=Point.fromXY(1, y);
             go(point);
 
             y-=yDelta;
-
-            if (y<=-1){
-                break;
-            }
 
             point=Point.fromXY(1, y);
             go(point);
@@ -76,10 +72,6 @@ public class TestFiller4 extends ATrack {
             go(point);
 
             y-=yDelta;
-
-            if (y<=-1){
-                break;
-            }
 
             point=Point.fromXY(-1, y);
             go(point);
@@ -96,36 +88,28 @@ public class TestFiller4 extends ATrack {
 
         Point point;
 
-        point=Point.fromXY(x, 1);
+        point=Point.fromXY(x, -1);
         go(point);
 
-        while (true) {
+        for (int i=0; i<numRows/2; i++) {
+            point=Point.fromXY(x, 1);
+            go(point);
+
+            x+=xDelta;
+
+            point=Point.fromXY(x, 1);
+            go(point);
+
             point=Point.fromXY(x, -1);
             go(point);
 
             x+=xDelta;
 
-            if (x>=1){
-                break;
-            }
-
             point=Point.fromXY(x, -1);
-            go(point);
-
-            point=Point.fromXY(x, +1);
-            go(point);
-
-            x+=xDelta;
-
-            if (x>=1){
-                break;
-            }
-
-            point=Point.fromXY(x, +1);
             go(point);
         }
 
-        point=Point.fromXY(x, -1);
+        point=Point.fromXY(x, 1);
         go(point);
     }
 
@@ -133,12 +117,8 @@ public class TestFiller4 extends ATrack {
         double x=point.x;
         double y=point.y;
 
-        if (isBackwardsX()){
+        if (isBackwards()){
             x=-x;
-        }
-
-        if (isBackwardsY()){
-            y=-y;
         }
 
         x=(x+1)/scale - 1 + gridX*gridLength;
@@ -147,12 +127,8 @@ public class TestFiller4 extends ATrack {
         dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromXY(x, y)));
     }
 
-    private boolean isBackwardsX(){
+    private boolean isBackwards(){
         return gridY % 2 == 1;
-    }
-
-    private boolean isBackwardsY(){
-        return gridX % 2 == 1;
     }
 
 //    private void moveTo(Point fromPoint, Point toPoint){
