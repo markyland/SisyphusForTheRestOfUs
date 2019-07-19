@@ -115,6 +115,8 @@ public class TestFiller14 extends ATrack {
     private void line(double y, boolean isRight) {
         double yOffset=0;
 
+        boolean lastNowIn=false;
+
         double x = isRight ? -1.1 : 1.1;
 
         while (isRight ? (x <= 1.1) : (x>=-1.1)) {
@@ -125,14 +127,15 @@ public class TestFiller14 extends ATrack {
             //-----------effect on point 3-----------
             boolean nowIn = in(point.x, point.y);
             boolean lookaheadIn = in(point.x + (isRight ? LOOKAHEAD : -LOOKAHEAD), point.y);
-            boolean lookbackIn = in(point.x + (isRight ? -LOOKAHEAD : LOOKAHEAD), point.y);
 
-            if (!nowIn && lookaheadIn) {
-                yOffset = HEIGHT;
-                x=point.x + (isRight ? LOOKAHEAD : -LOOKAHEAD);
-            } else if (!nowIn && lookbackIn) {
-                yOffset = 0;
-                x=point.x + (isRight ? LOOKAHEAD : -LOOKAHEAD);
+            if (isRight) {
+                if (!nowIn && lookaheadIn) {
+                    yOffset = HEIGHT;
+                    x = point.x + (isRight ? LOOKAHEAD : -LOOKAHEAD);
+                } else if (!nowIn && lastNowIn) {
+                    yOffset = 0;
+                    x = point.x + (isRight ? LOOKAHEAD : -LOOKAHEAD);
+                }
             }
 
             point2 = Point.fromXY(x, point2.y + yOffset);
@@ -141,6 +144,8 @@ public class TestFiller14 extends ATrack {
             go(point2);
 
             x += (isRight ? 1.1 : -1.1) * maxPointDistance;
+
+            lastNowIn=nowIn;
         }
     }
 
