@@ -22,7 +22,7 @@ public class TestFiller14 extends ATrack {
     private static double maxPointDistance = 0.01;  // approximately 2mm on A16 table...
 
     private static final double yDelta=.02;
-    private static final double HEIGHT=.07;
+    private static final double HEIGHT=.09;
     private static final double LOOKAHEAD=.04;
 
     private int pixels[][];
@@ -37,7 +37,7 @@ public class TestFiller14 extends ATrack {
     }
 
     private void loadImage(){
-        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\test.png");
+        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\empty.png");
 
         Image img = icon.getImage();
 

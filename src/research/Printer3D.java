@@ -21,8 +21,8 @@ public class Printer3D extends ATrack {
     private static final double yDelta=.02;
     private static final double yDelta2=.03;
     private static final double xDelta=.016;
-    private static final double HEIGHT=.05;
-    private static final double LOOKAHEAD=.025;
+    private static final double HEIGHT=.09;
+    private static final double LOOKAHEAD=.04;
 
     private int pixels[][];
     private int width;
@@ -37,7 +37,7 @@ public class Printer3D extends ATrack {
     }
 
     private void loadImage(){
-        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\logo2.png");
+        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\empty.png");
 
         Image img = icon.getImage();
 
@@ -74,7 +74,7 @@ public class Printer3D extends ATrack {
     }
 
     protected void trace() throws IOException {
-        squareV();
+      //  squareV();
 
         squareH();
 
@@ -199,9 +199,9 @@ public class Printer3D extends ATrack {
 
             double yOffset2=0;
 
-            if (!nowIn){
-               yOffset2=Math.sin(x*10+y*20)*.0055;
-            }
+//            if (!nowIn){
+//               yOffset2=Math.sin(x*10+y*20)*.0055;
+//            }
 
             point2 = Point.fromXY(x, point2.y + yOffset+yOffset2);
 
