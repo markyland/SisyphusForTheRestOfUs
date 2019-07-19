@@ -21,7 +21,7 @@ public class Filler2 {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
-                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\hotsun-table.png");
+                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\logo4-table.png");
 
                 Image img = icon.getImage();
 

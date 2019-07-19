@@ -11,15 +11,13 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class TestFiller4 extends ATrack {
+public class TestFiller7 extends ATrack {
 
-    private double scale=5;
-    private double gridLength=2.0/scale;
+    private double moonR=.75;
 
-    private int gridX=0;
-    private int gridY=0;
+    private boolean backwards=false;
 
-    public TestFiller4() throws Exception {
+    public TestFiller7() throws Exception {
         super("");
 
         trace();
@@ -29,19 +27,8 @@ public class TestFiller4 extends ATrack {
         Point point=Point.fromXY(-1, 1);
         dc.lineTo(dc.getCurrentRelativePosition().vectorTo(point));
 
-        for (int y=0; y<scale; y++){
-            for (int x=0; x<scale; x++) {
-                gridY=y;
-                gridX=isBackwards() ? (((int)scale)-x-1) : x;
-
-                if ((gridY*scale+gridX)%2==0){
-                    squareH((int)(100/scale));
-                }
-                else{
-                    squareV((int)(100/scale));
-                }
-            }
-        }
+        squareH(75);
+        squareH2(75);
 
         dc.renderPNG( "c:\\users\\mark\\desktop\\fill.png" );
         dc.write( "c:\\users\\mark\\desktop\\fill.thr" );
@@ -60,12 +47,38 @@ public class TestFiller4 extends ATrack {
         go(point);
 
         for (int i=0; i<numRows/2; i++) {
-            point=Point.fromXY(1, y);
+            double rightX;
+
+            if (y>=-moonR && y<=moonR){
+                if (y-yDelta<-moonR || y-yDelta>moonR){
+                    rightX=1;
+                }
+                else {
+                    rightX = -Math.sqrt(moonR * moonR - y * y);
+                }
+            }
+            else{
+                rightX=1;
+            }
+
+            point=Point.fromXY(rightX, y);
             go(point);
 
             y-=yDelta;
 
-            point=Point.fromXY(1, y);
+            if (y>=-moonR && y<=moonR){
+                if (y+yDelta<-moonR || y+yDelta>moonR){
+                    rightX=1;
+                }
+                else {
+                    rightX = -Math.sqrt(moonR * moonR - y * y);
+                }
+            }
+            else{
+                rightX=1;
+            }
+
+            point=Point.fromXY(rightX, y);
             go(point);
 
             point=Point.fromXY(-1, y);
@@ -81,55 +94,66 @@ public class TestFiller4 extends ATrack {
         go(point);
     }
 
-    private void squareV(int numRows){
-        double x=-1;
+    private void squareH2(int numRows){
+        double y=-1;
 
-        double xDelta=2.0/numRows;
+        double yDelta=2.0/numRows;
 
         Point point;
 
-        point=Point.fromXY(x, -1);
+        point=Point.fromXY(1, y);
         go(point);
 
         for (int i=0; i<numRows/2; i++) {
-            point=Point.fromXY(x, 1);
+            double rightX;
+
+            if (y>=-moonR && y<=moonR){
+                if (y+yDelta<-moonR || y+yDelta>moonR){
+                    rightX=-1;
+                }
+                else {
+                    rightX = Math.sqrt(moonR * moonR - y * y);
+                }
+            }
+            else{
+                rightX=-1;
+            }
+
+            point=Point.fromXY(rightX, y);
             go(point);
 
-            x+=xDelta;
+            y+=yDelta;
 
-            point=Point.fromXY(x, 1);
+            if (y>=-moonR && y<=moonR){
+                if (y-yDelta<-moonR || y-yDelta>moonR){
+                    rightX=-1;
+                }
+                else {
+                    rightX = Math.sqrt(moonR * moonR - y * y);
+                }
+            }
+            else{
+                rightX=-1;
+            }
+
+            point=Point.fromXY(rightX, y);
             go(point);
 
-            point=Point.fromXY(x, -1);
+            point=Point.fromXY(1, y);
             go(point);
 
-            x+=xDelta;
+            y+=yDelta;
 
-            point=Point.fromXY(x, -1);
+            point=Point.fromXY(1, y);
             go(point);
         }
 
-        point=Point.fromXY(x, 1);
+        point=Point.fromXY(-1, y);
         go(point);
     }
 
     private void go(Point point){
-        double x=point.x;
-        double y=point.y;
-
-        x+=.1;
-        if (isBackwards()){
-            x=-x;
-        }
-
-        x=(x+1)/scale - 1 + gridX*gridLength;
-        y=(y-1)/scale + 1 - gridY*gridLength;
-
-        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromXY(x, y)));
-    }
-
-    private boolean isBackwards(){
-        return gridY % 2 == 1;
+        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(point));
     }
 
 //    private void moveTo(Point fromPoint, Point toPoint){
@@ -155,6 +179,6 @@ public class TestFiller4 extends ATrack {
 //    }
 
     public static void main(String args[]) throws Exception {
-        TestFiller4 me = new TestFiller4();
+        TestFiller7 me = new TestFiller7();
     }
 }

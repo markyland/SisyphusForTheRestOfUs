@@ -11,15 +11,16 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class TestFiller4 extends ATrack {
+public class TestFiller6 extends ATrack {
 
-    private double scale=5;
+    private double scale=7;
     private double gridLength=2.0/scale;
 
-    private int gridX=0;
+    private double diag=.15;
+
     private int gridY=0;
 
-    public TestFiller4() throws Exception {
+    public TestFiller6() throws Exception {
         super("");
 
         trace();
@@ -30,33 +31,25 @@ public class TestFiller4 extends ATrack {
         dc.lineTo(dc.getCurrentRelativePosition().vectorTo(point));
 
         for (int y=0; y<scale; y++){
-            for (int x=0; x<scale; x++) {
-                gridY=y;
-                gridX=isBackwards() ? (((int)scale)-x-1) : x;
+            gridY=y;
 
-                if ((gridY*scale+gridX)%2==0){
-                    squareH((int)(100/scale));
-                }
-                else{
-                    squareV((int)(100/scale));
-                }
-            }
+                squareD(100);
         }
 
         dc.renderPNG( "c:\\users\\mark\\desktop\\fill.png" );
         dc.write( "c:\\users\\mark\\desktop\\fill.thr" );
 
         Runtime.getRuntime().exec("cmd /C start c:\\users\\mark\\desktop\\fill.png");
-    }
+}
 
     private void squareH(int numRows){
         double y=1;
 
-        double yDelta=2.0/numRows;
+        double yDelta=1.0/numRows;
 
         Point point;
 
-        point=Point.fromXY(-1, y);
+        point=Point.fromXY(0, y);
         go(point);
 
         for (int i=0; i<numRows/2; i++) {
@@ -68,12 +61,12 @@ public class TestFiller4 extends ATrack {
             point=Point.fromXY(1, y);
             go(point);
 
-            point=Point.fromXY(-1, y);
+            point=Point.fromXY(0, y);
             go(point);
 
             y-=yDelta;
 
-            point=Point.fromXY(-1, y);
+            point=Point.fromXY(0, y);
             go(point);
         }
 
@@ -82,13 +75,13 @@ public class TestFiller4 extends ATrack {
     }
 
     private void squareV(int numRows){
-        double x=-1;
+        double x=0;
 
-        double xDelta=2.0/numRows;
+        double xDelta=1.0/numRows;
 
         Point point;
 
-        point=Point.fromXY(x, -1);
+        point=Point.fromXY(x, 0);
         go(point);
 
         for (int i=0; i<numRows/2; i++) {
@@ -100,12 +93,12 @@ public class TestFiller4 extends ATrack {
             point=Point.fromXY(x, 1);
             go(point);
 
-            point=Point.fromXY(x, -1);
+            point=Point.fromXY(x, 0);
             go(point);
 
             x+=xDelta;
 
-            point=Point.fromXY(x, -1);
+            point=Point.fromXY(x, 0);
             go(point);
         }
 
@@ -113,17 +106,48 @@ public class TestFiller4 extends ATrack {
         go(point);
     }
 
+    private void squareD(int numRows){
+        double x=0;
+
+        double xDelta=1.0/numRows;
+
+        Point point;
+
+        point=Point.fromXY(x, 0);
+        go(point);
+
+        for (int i=0; i<numRows/2; i++) {
+            point=Point.fromXY(x+diag, 1);
+            go(point);
+
+            x+=xDelta;
+
+            point=Point.fromXY(x+diag, 1);
+            go(point);
+
+            point=Point.fromXY(x, 0);
+            go(point);
+
+            x+=xDelta;
+
+            point=Point.fromXY(x, 0);
+            go(point);
+        }
+
+        point=Point.fromXY(x+diag, 1);
+        go(point);
+    }
+
     private void go(Point point){
         double x=point.x;
         double y=point.y;
 
-        x+=.1;
         if (isBackwards()){
-            x=-x;
+            x=1-x;
         }
 
-        x=(x+1)/scale - 1 + gridX*gridLength;
-        y=(y-1)/scale + 1 - gridY*gridLength;
+        x=x*2.8-1.4;
+        y=(y*2-2)/scale + 1 - gridY*gridLength;
 
         dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromXY(x, y)));
     }
@@ -155,6 +179,6 @@ public class TestFiller4 extends ATrack {
 //    }
 
     public static void main(String args[]) throws Exception {
-        TestFiller4 me = new TestFiller4();
+        TestFiller6 me = new TestFiller6();
     }
 }

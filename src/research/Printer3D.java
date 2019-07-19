@@ -1,0 +1,246 @@
+package research;
+
+import com.slightlyloony.jsisyphus.ATrack;
+import com.slightlyloony.jsisyphus.Point;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.ImageObserver;
+import java.awt.image.PixelGrabber;
+import java.io.IOException;
+
+/**
+ * Created by IntelliJ IDEA.
+ * User: mark
+ * Date: 2/28/18
+ * Time: 8:44 AM
+ */
+public class Printer3D extends ATrack {
+    private static double maxPointDistance = 0.01;  // approximately 2mm on A16 table...
+
+    private static final double yDelta=.02;
+    private static final double yDelta2=.03;
+    private static final double xDelta=.016;
+    private static final double HEIGHT=.05;
+    private static final double LOOKAHEAD=.025;
+
+    private int pixels[][];
+    private int width;
+    private int height;
+
+    public Printer3D() throws Exception {
+        super("");
+
+        loadImage();
+
+        trace();
+    }
+
+    private void loadImage(){
+        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\logo2.png");
+
+        Image img = icon.getImage();
+
+        width = img.getWidth(null)-200;
+        height = img.getHeight(null)-200;
+        int[] pixels1D = new int[width * height];
+
+        PixelGrabber pg = new PixelGrabber(img, 100, 100, width, height, pixels1D, 0, width);
+
+        try {
+            pg.grabPixels();
+        }
+        catch (InterruptedException e) {
+            throw new IllegalStateException("Error: Interrupted Waiting for Pixels");
+        }
+
+        if ((pg.getStatus() & ImageObserver.ABORT) != 0) {
+            throw new IllegalStateException("Error: Image Fetch Aborted");
+        }
+
+        //switch to 2 dim array
+        pixels = new int[height][width];
+        for (int y=0; y<height; y++){
+            for (int x=0; x<width; x++){
+                int val=pixels1D[y*width+x];
+
+                int r=val >> 16 & 0xFF;
+                int g=val >> 8 & 0xFF;
+                int b=val & 0xFF;
+
+                pixels[y][x]=(r+b+g)/3;
+            }
+        }
+    }
+
+    protected void trace() throws IOException {
+        squareV();
+
+        squareH();
+
+        dc.renderPNG( "c:\\users\\mark\\desktop\\fill.png" );
+        dc.write( "c:\\users\\mark\\desktop\\fill.thr" );
+
+        Runtime.getRuntime().exec("cmd /C start c:\\users\\mark\\desktop\\fill.png");
+    }
+
+    private void squareH(){
+        Point point;
+
+        point=Point.fromXY(-1.1, 1);
+        go(point);
+
+        double y=1;
+
+        while (y>=-1.1){
+            line(y, true);
+
+            y-=yDelta;
+
+            point=Point.fromXY(1.1, y);
+            go(point);
+
+            line(y, false);
+
+            y-=yDelta;
+
+            point=Point.fromXY(-1.1, y);
+            go(point);
+        }
+
+        line(-1.1, true);
+    }
+
+    private void squareH2(){
+        Point point;
+
+        double y=-1.1;
+
+        point=Point.fromXY(-1.1, y);
+        go(point);
+
+        while (y<=1.1){
+            point=Point.fromXY(1.1, y);
+            go(point);
+
+            y+=yDelta2;
+
+            point=Point.fromXY(1.1, y);
+            go(point);
+
+            point=Point.fromXY(-1.1, y);
+            go(point);
+
+            y+=yDelta2;
+
+            point=Point.fromXY(-1.1, y);
+            go(point);
+        }
+    }
+
+    private void squareV(){
+        Point point;
+
+        point=Point.fromXY(1.1, 1.1);
+        go(point);
+
+        double x=1.1;
+
+        while (x>=-1.1){
+            point=Point.fromXY(x, -1.1);
+            go(point);
+
+            x-=xDelta;
+
+            point=Point.fromXY(x, -1.1);
+            go(point);
+
+            point=Point.fromXY(x, 1.1);
+            go(point);
+
+            x-=xDelta;
+
+            point=Point.fromXY(x, 1.1);
+            go(point);
+        }
+
+        point=Point.fromXY(-1.1, 1.1);
+        go(point);
+    }
+
+    private void line(double y, boolean isRight) {
+        double yOffset=0;
+
+        double x = isRight ? -1.1 : 1.1;
+
+        while (isRight ? (x <= 1.1) : (x>=-1.1)) {
+            Point point = Point.fromXY(x, y);
+
+            Point point2=point;
+
+            //-----------effect on point 3-----------
+            boolean nowIn = in(point.x, point.y);
+            boolean xLookaheadIn = in(point.x + (isRight ? LOOKAHEAD : -LOOKAHEAD), point.y);
+            boolean xLookaheadIn2 = in(point.x + (isRight ? LOOKAHEAD*2 : -LOOKAHEAD*2), point.y);
+            boolean xLookbackIn = in(point.x + (isRight ? -LOOKAHEAD : LOOKAHEAD), point.y);
+
+            if (!nowIn && xLookbackIn && xLookaheadIn2){
+                yOffset = HEIGHT;
+            }
+            else if (!nowIn && xLookaheadIn) {
+                yOffset = HEIGHT;
+                x=point.x + (isRight ? LOOKAHEAD : -LOOKAHEAD);
+            } else if (!nowIn && xLookbackIn) {
+                yOffset = 0;
+                x=point.x + (isRight ? LOOKAHEAD : -LOOKAHEAD);
+            }
+
+            //-------------------------------------------------
+
+            double yOffset2=0;
+
+            if (!nowIn){
+               yOffset2=Math.sin(x*10+y*20)*.0055;
+            }
+
+            point2 = Point.fromXY(x, point2.y + yOffset+yOffset2);
+
+            go(point2);
+
+            x += (isRight ? 1.1 : -1.1) * maxPointDistance;
+        }
+    }
+
+    private boolean in(double x, double y){
+        return getFill(Point.fromXY(x, y))==0;
+
+        //return x>-.4 && x<.4 && y>-.4 && y<.4;
+    }
+
+    private boolean in2(double x, double y){
+        return getFill(Point.fromXY(x, y))==0;
+
+        //return x>-.4 && x<.4 && y>-.4 && y<.4;
+    }
+
+    private void go(Point point){
+        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(point));
+    }
+
+    private int getFill(Point point){
+        double x=point.x;
+        double y=point.y;
+
+        if (x*x+y*y>1){
+            return 255;
+        }
+
+//        System.err.println(point.x + " " + point.y);
+
+        return pixels[(int)Math.round((height-1)-(height-1)*(y/2+.5))][(int)Math.round((width-1)*(x/2+.5))];
+    }
+
+    public static void main(String args[]) throws Exception {
+        Printer3D me = new Printer3D();
+    }
+}

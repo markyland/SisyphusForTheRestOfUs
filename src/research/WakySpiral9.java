@@ -25,7 +25,7 @@ public class WakySpiral9 {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
-                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\picture.png");
+                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\milesduck.png");
 
                 Image img = icon.getImage();
 
@@ -64,7 +64,7 @@ public class WakySpiral9 {
 //                dc.setEraseSpacing(0.005);
 //                dc.eraseTo(Point.fromRT(1, startTheta));
 
-                double theta=0;
+                double theta=40;
 
                 while (true){
                     theta+=.01;

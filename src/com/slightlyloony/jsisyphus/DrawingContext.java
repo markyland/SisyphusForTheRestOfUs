@@ -407,23 +407,28 @@ public class DrawingContext {
 
         // add two identical entries, forcing the rho to be either 0 or 1 (whichever is closer)
         // learned from Bruce Shapiro that NOT doing this could introduce positioning errors...
-    //    Position last = vertices.get( vertices.size() - 1 );
+        //    Position last = vertices.get( vertices.size() - 1 );
 //        double endRho = (last.getRho() >= 0.5) ? 1 : 0;
 //        Position term = new PolarPosition( endRho, last.getTheta() );
 //        vertices.add( term );
 //        vertices.add( term );
 
         // clamp all vertice rho values to the range [0..1]...
-        for( int i = 0; i < vertices.size(); i++ ) {
+        for (int i = 0; i < vertices.size(); i++) {
 
-            Position vertice = vertices.get( i );
-            double clampedRho = max( 0, min( 1, vertice.getRho() ) );
-            if( vertice.getRho() == clampedRho )
+            Position vertice = vertices.get(i);
+            double clampedRho = max(0, min(1, vertice.getRho()));
+            if (vertice.getRho() == clampedRho)
                 continue;
-            vertices.set( i, new PolarPosition( clampedRho, vertice.getTheta() ) );
+            vertices.set(i, new PolarPosition(clampedRho, vertice.getTheta()));
+        }
+
+        for (int i = vertices.size() - 2; i > 1; i--) {
+            if (vertices.get(i).getRho() == 1 && vertices.get(i - 1).getRho() == 1 && vertices.get(i + 1).getRho() == 1) {
+                vertices.remove(i);
+            }
         }
     }
-
 
     private static final DecimalFormat THETA_FORMAT = new DecimalFormat( "#.########" );
     private static final DecimalFormat RHO_FORMAT   = new DecimalFormat( "#.########" );
