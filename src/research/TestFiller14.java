@@ -128,14 +128,12 @@ public class TestFiller14 extends ATrack {
             boolean nowIn = in(point.x, point.y);
             boolean lookaheadIn = in(point.x + (isRight ? LOOKAHEAD : -LOOKAHEAD), point.y);
 
-            if (isRight) {
-                if (!nowIn && lookaheadIn) {
-                    yOffset = HEIGHT;
-                    x = point.x + (isRight ? LOOKAHEAD : -LOOKAHEAD);
-                } else if (!nowIn && lastNowIn) {
-                    yOffset = 0;
-                    x = point.x + (isRight ? LOOKAHEAD : -LOOKAHEAD);
-                }
+            if (!nowIn && lookaheadIn) {
+                yOffset = HEIGHT;
+                x = point.x + (isRight ? LOOKAHEAD : -LOOKAHEAD);
+            } else if (!nowIn && lastNowIn) {
+                yOffset = 0;
+                x = point.x + (isRight ? LOOKAHEAD : -LOOKAHEAD);
             }
 
             point2 = Point.fromXY(x, point2.y + yOffset);
