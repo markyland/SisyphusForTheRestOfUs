@@ -15,10 +15,10 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class Printer3D extends ATrack {
-    private static double maxPointDistance = 0.01;  // approximately 2mm on A16 table...
+public class TestFiller16 extends ATrack {
+    private static double maxPointDistance = 0.02;  // approximately 2mm on A16 table...
 
-    private static final double yDelta=.01;
+    private static final double yDelta=.012;
     private static final double xDelta=.016;
 
     double degrees=90;
@@ -27,7 +27,7 @@ public class Printer3D extends ATrack {
     private int width;
     private int height;
 
-    public Printer3D() throws Exception {
+    public TestFiller16() throws Exception {
         super("");
 
         loadImage();
@@ -35,7 +35,7 @@ public class Printer3D extends ATrack {
     }
 
     private void loadImage(){
-        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\tallstar.png");
+        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\star.png");
 
         Image img = icon.getImage();
 
@@ -72,12 +72,12 @@ public class Printer3D extends ATrack {
     }
 
     protected void trace() throws IOException {
-        Point point=Point.fromXY(-1.1, 1.1);
+        Point point=Point.fromXY(-1.1, 1);
         dc.lineTo(dc.getCurrentRelativePosition().vectorTo(point));
 
-        // squareV();
+       // squareV();
 
-        //     squareH(.01, false);
+        squareH(.01, false);
         squareH(yDelta, true);
 
         dc.renderPNG( "c:\\users\\mark\\desktop\\fill.png" );
@@ -89,10 +89,10 @@ public class Printer3D extends ATrack {
     private void squareH(double yDelta, boolean effect){
         Point point;
 
-        point=Point.fromXY(-1.1, 1.5);
+        point=Point.fromXY(-1.1, 1);
         go(point);
 
-        double y=1.5;
+        double y=1;
 
         while (y>=-1.1){
             line(y, true, effect);
@@ -180,31 +180,11 @@ public class Printer3D extends ATrack {
     private double in(double x, double y){
         int fill=255-getFill(Point.fromXY(x, y));
 
-        return fill/255.0*1;
-
-//        double r=.75;
-//
-//        if (x*x+y*y>r*r){
-//            return 0;
-//        }
-//
-//        System.err.println(Math.sqrt(r*r-x*x-y*y));
-//        return Math.sqrt(r*r-x*x-y*y)/1.5;
+        return fill/255.0*.15;
     }
 
-    private double lastGoX;
-    private double lastGoY;
-
     private void go(Point point){
-
-        if (Math.abs(lastGoX-point.x)<1e-6 && Math.abs(lastGoY-point.y)<1e-6){
-            return;
-        }
-
         dc.lineTo(dc.getCurrentRelativePosition().vectorTo(point));
-
-        lastGoX=point.x;
-        lastGoY=point.y;
     }
 
     private int getFill(Point point){
@@ -221,6 +201,6 @@ public class Printer3D extends ATrack {
     }
 
     public static void main(String args[]) throws Exception {
-        Printer3D me = new Printer3D();
+        TestFiller16 me = new TestFiller16();
     }
 }
