@@ -15,10 +15,10 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class Printer3D extends ATrack {
+public class TestSphere extends ATrack {
     private static double maxPointDistance = 0.01;  // approximately 2mm on A16 table...
 
-    private static final double yDelta=.01;
+    private static final double yDelta=.016;
     private static final double xDelta=.016;
 
     double degrees=90;
@@ -27,7 +27,7 @@ public class Printer3D extends ATrack {
     private int width;
     private int height;
 
-    public Printer3D() throws Exception {
+    public TestSphere() throws Exception {
         super("");
 
         loadImage();
@@ -72,12 +72,13 @@ public class Printer3D extends ATrack {
     }
 
     protected void trace() throws IOException {
-//        Point point=Point.fromXY(-1.1, 1.1);
-      //  dc.lineTo(dc.getCurrentRelativePosition().vectorTo(point));
+        Point point=Point.fromXY(-1.1, 1.1);
+        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(point));
 
         // squareV();
 
-      //  squareH(yDelta, false);
+        //     squareH(.01, false);
+        squareH(yDelta, false);
         squareH(yDelta, true);
 
         dc.renderPNG( "c:\\users\\mark\\desktop\\fill.png" );
@@ -165,6 +166,10 @@ public class Printer3D extends ATrack {
                 yOffset += diffY;
                 xOffset += diffY * Math.cos(Math.toRadians(90));
 
+                if (y>0 && y<.1) {
+                    System.err.println(x + " " + y + " " + curY + " " + yOffset + " " + point2.y);
+                }
+
                 point2 = Point.fromXY(x + xOffset, point2.y + yOffset);
 
                 lastY=curY;
@@ -188,15 +193,8 @@ public class Printer3D extends ATrack {
             return 0;
         }
 
-        double z=Math.sqrt(r*r-x*x-y*y);
-
-        double z0=Math.sqrt(r*r-x*x);
-
-        if (y+z>0+z0){
-            z=0;//z0-y;
-        }
-
-        return z;
+       // System.err.println(x + " " + y + " " " + Math.sqrt(r*r-x*x-y*y));
+        return Math.sqrt(r*r-x*x-y*y);
     }
 
     private double lastGoX;
@@ -228,6 +226,6 @@ public class Printer3D extends ATrack {
     }
 
     public static void main(String args[]) throws Exception {
-        Printer3D me = new Printer3D();
+        TestSphere me = new TestSphere();
     }
 }

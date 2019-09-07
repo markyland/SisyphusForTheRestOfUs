@@ -15,19 +15,17 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class Printer3D extends ATrack {
+public class TestSphere2 extends ATrack {
     private static double maxPointDistance = 0.01;  // approximately 2mm on A16 table...
 
-    private static final double yDelta=.01;
+  //  private static final double yDelta=.005;
     private static final double xDelta=.016;
-
-    double degrees=90;
 
     private int pixels[][];
     private int width;
     private int height;
 
-    public Printer3D() throws Exception {
+    public TestSphere2() throws Exception {
         super("");
 
         loadImage();
@@ -35,7 +33,7 @@ public class Printer3D extends ATrack {
     }
 
     private void loadImage(){
-        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\star.png");
+        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\sun.png");
 
         Image img = icon.getImage();
 
@@ -78,7 +76,9 @@ public class Printer3D extends ATrack {
         // squareV();
 
       //  squareH(yDelta, false);
-        squareH(yDelta, true);
+        squareH(.005, false);
+
+     //   squareH2(.01, true);
 
         dc.renderPNG( "c:\\users\\mark\\desktop\\fill.png" );
         dc.write( "c:\\users\\mark\\desktop\\fill.thr" );
@@ -89,12 +89,44 @@ public class Printer3D extends ATrack {
     private void squareH(double yDelta, boolean effect){
         Point point;
 
+        point=Point.fromXY(-1, -1);
+        go(point);
+
+        double y=0;
+
+        while (y>=-1.1){
+            line(y, true, effect);
+
+            y-=yDelta;
+
+            yDelta+=.001;
+
+            point=Point.fromXY(1.1, y);
+            go(point);
+
+            line(y, false, effect);
+
+            y-=yDelta;
+
+            yDelta+=.001;
+
+
+            point=Point.fromXY(-1.1, y);
+            go(point);
+        }
+
+        line(1.1, true, effect);
+    }
+
+    private void squareH2(double yDelta, boolean effect){
+        Point point;
+
         point=Point.fromXY(-1.1, 1.5);
         go(point);
 
-        double y=1.5;
+        double y=1;
 
-        while (y>=-1.1){
+        while (y>=.2){
             line(y, true, effect);
 
             y-=yDelta;
@@ -105,6 +137,7 @@ public class Printer3D extends ATrack {
             line(y, false, effect);
 
             y-=yDelta;
+
 
             point=Point.fromXY(-1.1, y);
             go(point);
@@ -144,9 +177,6 @@ public class Printer3D extends ATrack {
     }
 
     private void line(double y, boolean isRight, boolean effect) {
-        double xOffset=0;
-        double yOffset=0;
-
         double lastY=0;
 
         double x = isRight ? -1.1 : 1.1;
@@ -158,16 +188,9 @@ public class Printer3D extends ATrack {
 
             //-----------effect on point 3-----------
             if (effect) {
-                double curY = in(point.x, point.y);
+                double yOffset = in(point.x, point.y);
 
-                double diffY = curY - lastY;
-
-                yOffset += diffY;
-                xOffset += diffY * Math.cos(Math.toRadians(90));
-
-                point2 = Point.fromXY(x + xOffset, point2.y + yOffset);
-
-                lastY=curY;
+                point2 = Point.fromXY(x, y+yOffset);
             }
             //---------------------------------------
 
@@ -178,25 +201,9 @@ public class Printer3D extends ATrack {
     }
 
     private double in(double x, double y){
-//        int fill=255-getFill(Point.fromXY(x, y));
-//
-//        return fill/255.0*1;
+        int fill=255-getFill(Point.fromXY(x, y));
 
-        double r=.75;
-
-        if (x*x+y*y>r*r){
-            return 0;
-        }
-
-        double z=Math.sqrt(r*r-x*x-y*y);
-
-        double z0=Math.sqrt(r*r-x*x);
-
-        if (y+z>0+z0){
-            z=0;//z0-y;
-        }
-
-        return z;
+        return fill/255.0*.1;
     }
 
     private double lastGoX;
@@ -228,6 +235,6 @@ public class Printer3D extends ATrack {
     }
 
     public static void main(String args[]) throws Exception {
-        Printer3D me = new Printer3D();
+        TestSphere2 me = new TestSphere2();
     }
 }

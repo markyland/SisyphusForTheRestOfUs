@@ -22,7 +22,7 @@ public class TestFiller12 extends ATrack {
 
     double eraseSpace=0.0125;
 
-    double x=.3;
+    double x=0;
     double y=.5;
 
     public TestFiller12() throws Exception {
