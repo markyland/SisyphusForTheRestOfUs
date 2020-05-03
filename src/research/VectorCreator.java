@@ -18,7 +18,7 @@ import java.util.*;
 public class VectorCreator {
 
     public void process() {
-        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\flower.jpg");
+        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\dreidel.png");
 
         Image img = icon.getImage();
 
@@ -96,11 +96,7 @@ public class VectorCreator {
         System.err.println("");
         //---------------------------------------------------------------------------------------------------------
 
-        ArrayList<ArrayList<Point>> paths = new ArrayList<>();
-
-        ArrayList<Point> currentPath = new ArrayList<>();
-
-        getPaths(pixels, xStart, yStart, currentPath, paths);
+        ArrayList<ArrayList<Point>> paths = getPaths(pixels, xStart, yStart);
 
         //---------------------------------------------------------------------------------------------------------
 
@@ -129,68 +125,118 @@ public class VectorCreator {
             }
             System.err.println("");
         }
+
+//        for (ArrayList<Point> path : paths){
+//            System.err.println(path.get(0).x+","+path.get(0).y + " " + path.get(path.size()-1).x+","+path.get(path.size()-1).y);
+//        }
     }
 
-    private void getPaths(int pixels[][], int x, int y, ArrayList<Point> currentPath, ArrayList<ArrayList<Point>> paths){
-        currentPath.add(new Point(x, y));
+    private ArrayList<ArrayList<Point>> getPaths(int pixels[][], int x, int y){
+        ArrayList<ArrayList<Point>> paths = new ArrayList<>();
 
-        if ( getPixel(pixels, x, y)==0) {   //been here before
-            paths.add(currentPath);
-            return;
+        Stack<PathAndPoint> stack = new Stack<>();
+        stack.add(new PathAndPoint(new ArrayList<>(), new Point(x, y)));
+
+        while (stack.size()>0) {
+            PathAndPoint pathAndPoint = stack.pop();
+
+            ArrayList<Point> currentPath = pathAndPoint.path;
+            Point point = pathAndPoint.point;
+
+            x=point.x;
+            y=point.y;
+
+            currentPath.add(new Point(x, y));
+
+//            if (pixels[y][x]==2){    //jfkdjfldkfjlkfjds
+//                continue;
+//            }
+//
+            pixels[y][x]=2;
+
+            int right = getPixel(pixels, x + 1, y);
+            int left = getPixel(pixels, x - 1, y);
+            int down = getPixel(pixels, x, y + 1);
+            int up = getPixel(pixels, x, y - 1);
+
+            int count = (right==1 ? 1 : 0) +
+                    (left==1 ? 1 : 0) +
+                    (down==1 ? 1 : 0) +
+                    (up==1 ? 1 : 0);
+
+            if (count == 1) {       //easy case to next one
+                if (right == 1) {
+                    stack.add(new PathAndPoint(currentPath, new Point(x+1, y)));
+                }
+                else if (left == 1) {
+                    stack.add(new PathAndPoint(currentPath, new Point(x-1, y)));
+                }
+                else if (down == 1) {
+                    stack.add(new PathAndPoint(currentPath, new Point(x, y+1)));
+                }
+                else {  //isUp
+                    stack.add(new PathAndPoint(currentPath, new Point(x, y-1)));
+                }
+            }
+            else if (count == 0){  //end of the road
+//                int count2 = (right==2 ? 1 : 0) +
+//                        (left==2 ? 1 : 0) +
+//                        (down==2 ? 1 : 0) +
+//                        (up==2 ? 1 : 0);
+//
+//                System.err.println("count2 = " + count2);
+//
+//                if (count2==1){
+//                    if (right == 2) {
+//                        currentPath.add(new Point(x+1, y));
+//                    }
+//                    else if (left == 2) {
+//                        currentPath.add(new Point(x-1, y));
+//                    }
+//                    else if (down == 2) {
+//                        currentPath.add(new Point(x, y+1));
+//                    }
+//                    else {  //isUp
+//                        currentPath.add(new Point(x, y-1));
+//                    }
+//                }
+
+                if (currentPath.size()>1) {
+                    paths.add(currentPath);
+                }
+            }
+            else {          //fork
+                if (currentPath.size()>1) {
+                    paths.add(currentPath);
+                }
+
+                if (right == 1) {
+                    currentPath = new ArrayList<>();
+                    currentPath.add(new Point(x, y));
+                    stack.add(new PathAndPoint(currentPath, new Point(x + 1, y)));
+                }
+
+                if (left == 1) {
+                    currentPath = new ArrayList<>();
+                    currentPath.add(new Point(x, y));
+                    stack.add(new PathAndPoint(currentPath, new Point(x - 1, y)));
+                }
+
+                if (down == 1) {
+                    currentPath = new ArrayList<>();
+                    currentPath.add(new Point(x, y));
+                    stack.add(new PathAndPoint(currentPath, new Point(x, y + 1)));
+                }
+
+                if (up == 1) {  //isUp
+                    currentPath = new ArrayList<>();
+                    currentPath.add(new Point(x, y));
+                    stack.add(new PathAndPoint(currentPath, new Point(x, y - 1)));
+                }
+            }
         }
 
-        pixels[y][x]=0;
-
-        int isRight=Math.min(getPixel(pixels, x+1, y),1);
-        int isLeft=Math.min(getPixel(pixels, x-1, y),1);
-        int isDown=Math.min(getPixel(pixels, x, y+1),1);
-        int isUp=Math.min(getPixel(pixels, x, y-1),1);
-
-        int count=isRight+isLeft+isDown+isUp;
-
-        if (count==1) {       //easy case to next one
-            if (isRight==1) {
-                getPaths(pixels, x+1, y, currentPath, paths);
-            }
-            else if (isLeft==1){
-                getPaths(pixels, x-1, y, currentPath, paths);
-            }
-            else if (isDown==1){
-                getPaths(pixels, x, y+1, currentPath, paths);
-            }
-            else{  //isUp
-                getPaths(pixels, x, y-1, currentPath, paths);
-            }
-        }
-        else {
-            //we could be the end of a line or it could be a fork in the road.  either way its the end of this path
-
-            paths.add(currentPath);
-
-            if (isRight!=0) {
-                currentPath=new ArrayList<>();
-                currentPath.add(new Point(x, y));
-                getPaths(pixels, x+1, y, currentPath, paths);
-            }
-
-            if (isLeft!=0){
-                currentPath=new ArrayList<>();
-                currentPath.add(new Point(x, y));
-                getPaths(pixels, x-1, y, currentPath, paths);
-            }
-
-            if (isDown!=0){
-                currentPath=new ArrayList<>();
-                currentPath.add(new Point(x, y));
-                getPaths(pixels, x, y+1, currentPath, paths);
-            }
-
-            if (isUp!=0){  //isUp
-                currentPath=new ArrayList<>();
-                currentPath.add(new Point(x, y));
-                getPaths(pixels, x, y-1, currentPath, paths);
-            }
-        }
+        return paths;
     }
 
     private void fillIn(int pixels[][]) {
@@ -231,6 +277,16 @@ public class VectorCreator {
         public Point(int x, int y) {
             this.x = x;
             this.y = y;
+        }
+    }
+
+    class PathAndPoint {
+        ArrayList<Point> path;
+        Point point;
+
+        public PathAndPoint(ArrayList<Point> path, Point point) {
+            this.path = path;
+            this.point = point;
         }
     }
 
