@@ -58,14 +58,14 @@ public class VectorCreator {
 
         //print it...
 
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                System.err.print(pixels[i][j] == 0 ? "." : pixels[i][j]);
-            }
-            System.err.println("");
-        }
-
-        System.err.println("");
+//        for (int i = 0; i < height; i++) {
+//            for (int j = 0; j < width; j++) {
+//                System.err.print(pixels[i][j] == 0 ? "." : pixels[i][j]);
+//            }
+//            System.err.println("");
+//        }
+//
+//        System.err.println("");
 
         //find first point
 
@@ -87,14 +87,14 @@ public class VectorCreator {
         //---------------------------------------------------------------------------------------------------------
         fillIn(pixels);
 
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
-                System.err.print(pixels[i][j] == 0 ? "." : pixels[i][j]);
-            }
-            System.err.println("");
-        }
+//        for (int i = 0; i < height; i++) {
+//            for (int j = 0; j < width; j++) {
+//                System.err.print(pixels[i][j] == 0 ? "." : pixels[i][j]);
+//            }
+//            System.err.println("");
+//        }
 
-        System.err.println("");
+  //      System.err.println("");
         //---------------------------------------------------------------------------------------------------------
 
         ArrayList<ArrayList<Point>> paths = getPaths(pixels, xStart, yStart);
@@ -126,12 +126,12 @@ public class VectorCreator {
             }
         }
 
-        for (ArrayList<Point> path : paths){
-            for (Point point : path) {
-                System.err.print(point.x+","+point.y + " ");
-            }
-            System.err.println("");
-        }
+//        for (ArrayList<Point> path : paths){
+//            for (Point point : path) {
+//                System.err.print(point.x+","+point.y + " ");
+//            }
+//            System.err.println("");
+//        }
 
         return paths;
     }
