@@ -6,6 +6,7 @@ package v1; /**
  */
 
 import com.slightlyloony.jsisyphus.*;
+import research.VectorCreator;
 
 import javax.swing.*;
 import java.io.*;
@@ -532,54 +533,53 @@ public class GraphSolver {
 
         GraphSolver.progressBar=progressBar;
 
-        BufferedReader in = new BufferedReader(new FileReader(inputFile));
+        VectorCreator vectorCreator = new VectorCreator();
 
-        String line=in.readLine();
+        ArrayList<ArrayList<VectorCreator.Point>> vectorCreatorPaths = vectorCreator.getPaths(inputFile);
 
         int lastPath=-1;
 
         int lastVerticeId=-1;
 
-        ArrayList<Point> pathVertices=new ArrayList<Point>();
+        ArrayList<Point> pathVertices=new ArrayList<>();
 
         double lastX=-1, lastY=-1;
 
-        while (line!=null){
+        int sz=vectorCreatorPaths.size();
 
-            String tokens[] = line.split(",");
+        for (int pathId=0; pathId<sz; pathId++) {
+            ArrayList<VectorCreator.Point> vectorCreatorPath = vectorCreatorPaths.get(pathId);
 
-            double x=Double.parseDouble(tokens[1]);
-            double y=Double.parseDouble(tokens[2]);
+            for (VectorCreator.Point point : vectorCreatorPath) {
+                double x = point.x;
+                double y = point.y;
 
-            int pathId=Integer.parseInt(tokens[4]);
+                if (pathId != lastPath) {
+                    Integer verticeId = getVerticeId(x, y);
 
-            if (pathId!=lastPath){
-                Integer verticeId=getVerticeId(x, y);
+                    if (lastVerticeId != -1) {
+                        Path path = new Path("" + (pathList.size() + 1), lastVerticeId, getVerticeId(lastX, lastY), new ArrayList<>(pathVertices));
+                        pathList.put("" + (pathList.size() + 1), path);
+                        //System.err.println("added : " + path);
 
-                if (lastVerticeId!=-1){
-                    Path path=new Path("" + (pathList.size()+1), lastVerticeId, getVerticeId(lastX, lastY), new ArrayList<>(pathVertices));
-                    pathList.put("" + (pathList.size()+1), path);
-                    //System.err.println("added : " + path);
+                        List<Point> reversePathVertices = new ArrayList<>(pathVertices);
+                        Collections.reverse(reversePathVertices);
+                        path = new Path("" + (pathList.size() + 1), getVerticeId(lastX, lastY), lastVerticeId, reversePathVertices);
+                        pathList.put("" + (pathList.size() + 1), path);
+                        //System.err.println("added : " + path);
+                    }
 
-                    List<Point> reversePathVertices=new ArrayList<>(pathVertices);
-                    Collections.reverse(reversePathVertices);
-                    path=new Path("" + (pathList.size()+1), getVerticeId(lastX, lastY), lastVerticeId, reversePathVertices);
-                    pathList.put("" + (pathList.size()+1), path);
-                    //System.err.println("added : " + path);
+                    lastPath = pathId;
+                    lastVerticeId = verticeId;
+
+                    pathVertices.clear();
                 }
 
-                lastPath=pathId;
-                lastVerticeId=verticeId;
+                lastX = x;
+                lastY = y;
 
-                pathVertices.clear();
+                pathVertices.add(new Point(x, y));
             }
-
-            lastX = x;
-            lastY = y;
-
-            pathVertices.add(new Point(x, y));
-
-            line=in.readLine();
         }
 
         Path endPath=new Path("" + (pathList.size()+1), lastVerticeId, getVerticeId(lastX, lastY), new ArrayList<>(pathVertices));

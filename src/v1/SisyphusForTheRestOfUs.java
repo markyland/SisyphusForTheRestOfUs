@@ -87,9 +87,10 @@ public class SisyphusForTheRestOfUs {
                     final File outputTrack;
                     final File outputPng;
                     String inputFileName = inputFile.getName();
-                    if (inputFileName.endsWith(".csv") || inputFileName.endsWith(".asc")){
-                        outputTrack=new File(inputFile.getParent(), inputFileName.substring(0, inputFileName.length()-4)+".thr");
-                        outputPng=new File(inputFile.getParent(), inputFileName.substring(0, inputFileName.length()-4)+"-table.png");
+
+                    if (inputFileName.contains(".")){
+                        outputTrack=new File(inputFile.getParent(), inputFileName.substring(0, inputFileName.lastIndexOf('.'))+".thr");
+                        outputPng=new File(inputFile.getParent(), inputFileName.substring(0, inputFileName.lastIndexOf('.'))+"-table.png");
                     }
                     else{
                         outputTrack=new File(inputFile.getParent(), inputFileName+".thr");

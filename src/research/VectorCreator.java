@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
 import java.util.*;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -17,8 +18,8 @@ import java.util.*;
  */
 public class VectorCreator {
 
-    public void process() {
-        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\dreidel.png");
+    public ArrayList<ArrayList<Point>> getPaths(String inputPath) {
+        ImageIcon icon = new ImageIcon(inputPath);
 
         Image img = icon.getImage();
 
@@ -100,23 +101,29 @@ public class VectorCreator {
 
         //---------------------------------------------------------------------------------------------------------
 
-        try {
-            BufferedWriter out = new BufferedWriter(new FileWriter("C:\\Users\\mark\\Desktop\\flower.asc"));
+//        try {
+//            BufferedWriter out = new BufferedWriter(new FileWriter("C:\\Users\\mark\\Desktop\\flower.asc"));
+//
+//            int sz=paths.size();
+//            for (int i=0; i<sz; i++){
+//                ArrayList<Point> path = paths.get(i);
+//
+//                for (Point point : path) {
+//                    out.write(","+point.x + "," + (height-point.y-1) + ",0," + (i+1) + "\n");
+//                }
+//            }
+//
+//            out.flush();
+//            out.close();
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
-            int sz=paths.size();
-            for (int i=0; i<sz; i++){
-                ArrayList<Point> path = paths.get(i);
-
-                for (Point point : path) {
-                    out.write(","+point.x + "," + (height-point.y-1) + ",0," + (i+1) + "\n");
-                }
+        for (ArrayList<Point> path : paths) {
+            for (Point point : path) {
+                point.y=height-point.y-1;
             }
-
-            out.flush();
-            out.close();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
         }
 
         for (ArrayList<Point> path : paths){
@@ -126,9 +133,7 @@ public class VectorCreator {
             System.err.println("");
         }
 
-//        for (ArrayList<Point> path : paths){
-//            System.err.println(path.get(0).x+","+path.get(0).y + " " + path.get(path.size()-1).x+","+path.get(path.size()-1).y);
-//        }
+        return paths;
     }
 
     private ArrayList<ArrayList<Point>> getPaths(int pixels[][], int x, int y){
@@ -270,9 +275,9 @@ public class VectorCreator {
         return pixels[y][x];
     }
 
-    class Point{
-        int x;
-        int y;
+    public static class Point{
+        public int x;
+        public int y;
 
         public Point(int x, int y) {
             this.x = x;
@@ -293,6 +298,6 @@ public class VectorCreator {
     public static void main(String args[]){
         VectorCreator me = new VectorCreator();
 
-        me.process();
+        me.getPaths("C:\\Users\\mark\\Desktop\\dreidel.png");
     }
 }
