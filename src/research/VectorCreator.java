@@ -1,14 +1,9 @@
 package research;
 
-import util.Path;
-
-import javax.imageio.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.*;
-import java.io.*;
 import java.util.*;
-import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -85,7 +80,7 @@ public class VectorCreator {
         }
 
         //---------------------------------------------------------------------------------------------------------
-        fillIn(pixels);
+        undiagonalfy(pixels);
 
 //        for (int i = 0; i < height; i++) {
 //            for (int j = 0; j < width; j++) {
@@ -94,10 +89,12 @@ public class VectorCreator {
 //            System.err.println("");
 //        }
 
-  //      System.err.println("");
+        //      System.err.println("");
         //---------------------------------------------------------------------------------------------------------
 
         ArrayList<ArrayList<Point>> paths = getPaths(pixels, xStart, yStart);
+
+        rediagonalfy(paths);
 
         //---------------------------------------------------------------------------------------------------------
 
@@ -244,7 +241,7 @@ public class VectorCreator {
         return paths;
     }
 
-    private void fillIn(int pixels[][]) {
+    private void undiagonalfy(int pixels[][]) {
         for (int y=0; y<pixels.length; y++) {
             for (int x=0; x<pixels[0].length; x++) {
                 if (getPixel(pixels, x, y)==0){
@@ -262,6 +259,21 @@ public class VectorCreator {
                 }
                 else if (getPixel(pixels, x-1, y+1)==1 && getPixel(pixels, x-1, y)==0 && getPixel(pixels, x, y+1)==0){
                     pixels[y][x-1]=1;
+                }
+            }
+        }
+    }
+
+    private void rediagonalfy(ArrayList<ArrayList<Point>> paths) {
+        for (ArrayList<Point> path : paths) {
+            int sz = path.size();
+
+            for (int i=0; i<sz-2; i++){
+                Point point0 = path.get(i);
+                Point point2 = path.get(i+2);
+
+                if (Math.abs(point0.x-point2.x)==1 && Math.abs(point0.y-point2.y)==1){
+                   path.set(i+1, new Point(point2.x, point2.y));   //copy just in case...
                 }
             }
         }
