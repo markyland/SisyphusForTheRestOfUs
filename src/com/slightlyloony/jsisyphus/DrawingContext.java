@@ -401,6 +401,10 @@ public class DrawingContext {
     }
 
 
+    public void removeCenterPosition(){  //hack to not have the starting position be 0,0
+        vertices=vertices.subList(2, vertices.size());
+    }
+
     // TODO: optimize by removing points along circle (esp. at rho == 1)...
     // do several things to make sure the .thr file is safe and optimal...
     private void massage() {

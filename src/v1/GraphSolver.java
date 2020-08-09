@@ -703,9 +703,7 @@ public class GraphSolver {
             protected void trace() throws IOException {
                 dc.setEraseSpacing(0.005);
 
-                if (addErase) {
-                    dc.eraseTo(com.slightlyloony.jsisyphus.Point.fromXY(points.get(0).x, points.get(0).y));
-                }
+                dc.eraseTo(com.slightlyloony.jsisyphus.Point.fromXY(points.get(0).x, points.get(0).y));
 
                 for (Point point : points){
                     com.slightlyloony.jsisyphus.Point dest = com.slightlyloony.jsisyphus.Point.fromXY(point.x, point.y);
@@ -713,6 +711,10 @@ public class GraphSolver {
                     //System.err.println(point.x+","+point.y);
 
                     dc.lineTo(dc.getCurrentRelativePosition().vectorTo(dest));
+                }
+
+                if (!addErase){
+                    dc.removeCenterPosition();
                 }
 
                 dc.renderPNG( outputFilePNG );
