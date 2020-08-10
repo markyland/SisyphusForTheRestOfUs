@@ -713,11 +713,12 @@ public class GraphSolver {
                     dc.lineTo(dc.getCurrentRelativePosition().vectorTo(dest));
                 }
 
+                dc.renderPNG( outputFilePNG );
+
                 if (!addErase){
                     dc.removeCenterPosition();
                 }
 
-                dc.renderPNG( outputFilePNG );
                 dc.write( outputFileTHR );
             }
         }.trace();
