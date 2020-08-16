@@ -16,69 +16,33 @@ import java.io.IOException;
  * Time: 8:44 AM
  */
 public class TestSphere2 extends ATrack {
-    private static double maxPointDistance = 0.01;  // approximately 2mm on A16 table...
-
-  //  private static final double yDelta=.005;
-    private static final double xDelta=.016;
-
-    private int pixels[][];
-    private int width;
-    private int height;
+    double eraseSpace=0.0125;
 
     public TestSphere2() throws Exception {
         super("");
 
-        loadImage();
         trace();
     }
 
-    private void loadImage(){
-        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\sun.png");
-
-        Image img = icon.getImage();
-
-        width = img.getWidth(null)-200;
-        height = img.getHeight(null)-200;
-        int[] pixels1D = new int[width * height];
-
-        PixelGrabber pg = new PixelGrabber(img, 100, 100, width, height, pixels1D, 0, width);
-
-        try {
-            pg.grabPixels();
-        }
-        catch (InterruptedException e) {
-            throw new IllegalStateException("Error: Interrupted Waiting for Pixels");
-        }
-
-        if ((pg.getStatus() & ImageObserver.ABORT) != 0) {
-            throw new IllegalStateException("Error: Image Fetch Aborted");
-        }
-
-        //switch to 2 dim array
-        pixels = new int[height][width];
-        for (int y=0; y<height; y++){
-            for (int x=0; x<width; x++){
-                int val=pixels1D[y*width+x];
-
-                int r=val >> 16 & 0xFF;
-                int g=val >> 8 & 0xFF;
-                int b=val & 0xFF;
-
-                pixels[y][x]=(r+b+g)/3;
-            }
-        }
-    }
-
     protected void trace() throws IOException {
-//        Point point=Point.fromXY(-1.1, 1.1);
-      //  dc.lineTo(dc.getCurrentRelativePosition().vectorTo(point));
+        Point3D p = new Point3D(0, -.75, 0);
 
-        // squareV();
+        double xRot=.5;
+        double yRot=0;
 
-      //  squareH(yDelta, false);
-        squareH(.005, false);
+        while (xRot<Math.PI){
+            Point3D p2 = rotX(p, xRot);
+            p2 = rotY(p2, yRot);
+            p2 = rotX(p2, -.8);
 
-     //   squareH2(.01, true);
+            Point point = Point.fromXY(p2.x/2*(p2.z+2), p2.y/2*(p2.z+2));
+//            Point point = Point.fromXY(p2.x, p2.y);
+
+            go(point);
+
+            xRot+=.00007;
+            yRot+=.01;
+        }
 
         dc.renderPNG( "c:\\users\\mark\\desktop\\fill.png" );
         dc.write( "c:\\users\\mark\\desktop\\fill.thr" );
@@ -86,152 +50,32 @@ public class TestSphere2 extends ATrack {
         Runtime.getRuntime().exec("cmd /C start c:\\users\\mark\\desktop\\fill.png");
     }
 
-    private void squareH(double yDelta, boolean effect){
-        Point point;
-
-        point=Point.fromXY(-1, -1);
-        go(point);
-
-        double y=0;
-
-        while (y>=-1.1){
-            line(y, true, effect);
-
-            y-=yDelta;
-
-            yDelta+=.001;
-
-            point=Point.fromXY(1.1, y);
-            go(point);
-
-            line(y, false, effect);
-
-            y-=yDelta;
-
-            yDelta+=.001;
-
-
-            point=Point.fromXY(-1.1, y);
-            go(point);
-        }
-
-        line(1.1, true, effect);
-    }
-
-    private void squareH2(double yDelta, boolean effect){
-        Point point;
-
-        point=Point.fromXY(-1.1, 1.5);
-        go(point);
-
-        double y=1;
-
-        while (y>=.2){
-            line(y, true, effect);
-
-            y-=yDelta;
-
-            point=Point.fromXY(1.1, y);
-            go(point);
-
-            line(y, false, effect);
-
-            y-=yDelta;
-
-
-            point=Point.fromXY(-1.1, y);
-            go(point);
-        }
-
-        line(1.1, true, effect);
-    }
-
-    private void squareV(){
-        Point point;
-
-        point=Point.fromXY(1.1, 1.1);
-        go(point);
-
-        double x=1.1;
-
-        while (x>=-1.1){
-            point=Point.fromXY(x, -1.1);
-            go(point);
-
-            x-=xDelta;
-
-            point=Point.fromXY(x, -1.1);
-            go(point);
-
-            point=Point.fromXY(x, 1.1);
-            go(point);
-
-            x-=xDelta;
-
-            point=Point.fromXY(x, 1.1);
-            go(point);
-        }
-
-        point=Point.fromXY(-1.1, 1.1);
-        go(point);
-    }
-
-    private void line(double y, boolean isRight, boolean effect) {
-        double lastY=0;
-
-        double x = isRight ? -1.1 : 1.1;
-
-        while (isRight ? (x <= 1.1) : (x>=-1.1)) {
-            Point point = Point.fromXY(x, y);
-
-            Point point2=point;
-
-            //-----------effect on point 3-----------
-            if (effect) {
-                double yOffset = in(point.x, point.y);
-
-                point2 = Point.fromXY(x, y+yOffset);
-            }
-            //---------------------------------------
-
-            go(point2);
-
-            x += (isRight ? 1 : -1) * maxPointDistance;
-        }
-    }
-
     private double in(double x, double y){
-        int fill=255-getFill(Point.fromXY(x, y));
+        double r=1;
 
-        return fill/255.0*.1;
+        return Math.sqrt(r*r-x*x-y*y);
     }
-
-    private double lastGoX;
-    private double lastGoY;
 
     private void go(Point point){
-
-        if (Math.abs(lastGoX-point.x)<1e-6 && Math.abs(lastGoY-point.y)<1e-6){
-            return;
-        }
-
         dc.lineTo(dc.getCurrentRelativePosition().vectorTo(point));
-
-        lastGoX=point.x;
-        lastGoY=point.y;
     }
 
-    private int getFill(Point point){
-        double x=point.x;
-        double y=point.y;
+    class Point3D{
+        public double x, y, z;
 
-        if (x>=1 || x<=-1 || y>=1 || y<=-1){
-            return 255;
+        public Point3D(double x, double y, double z) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
         }
+    }
 
-//        System.err.println(point.x + " " + point.y);
+    private Point3D rotX(Point3D p, double deg){
+        return new Point3D(p.x, p.y*Math.cos(deg)-p.z*Math.sin(deg), p.y*Math.sin(deg) + p.z*Math.cos(deg));
+    }
 
-        return pixels[(int)Math.round((height-1)-(height-1)*(y/2+.5))][(int)Math.round((width-1)*(x/2+.5))];
+    private Point3D rotY(Point3D p, double deg){
+        return new Point3D(p.x*Math.cos(deg) + p.z*Math.sin(deg), p.y, -p.x*Math.sin(deg)+p.z*Math.cos(deg));
     }
 
     public static void main(String args[]) throws Exception {
