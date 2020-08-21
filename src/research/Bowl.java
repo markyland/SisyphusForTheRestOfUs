@@ -21,25 +21,25 @@ public class Bowl extends ATrack {
     }
 
     protected void trace() throws IOException {
-        Point3D p = new Point3D(0, -.76, 0);
+        Point3D p = new Point3D(0, -.8, 0);
 
         double xRot=0;
         double yRot=0;
 
-        while (xRot<1.6){
+        while (xRot<1.15){
             Point3D p2 = rotX(p, xRot);
 
             p2 = rotY(p2, yRot);
-            p2 = rotX(p2, .6);
+            p2 = rotX(p2, .35);
 
             p2 = new Point3D(p2.x*1.2, p2.y, p2.z*1.2);
 
-            Point point = Point.fromXY(p2.x/2*(p2.z+2), p2.y/2*(p2.z+2));
-//            Point point = Point.fromXY(p2.x, p2.y);
+        //    Point point = Point.fromXY(p2.x/2*(p2.z+2), p2.y/2*(p2.z+2));
+           Point point = Point.fromXY(p2.x, p2.y);
 
             go(point);
 
-            xRot+=.00005;
+            xRot+=xRot<.6 ? .000025 : .00004;
             yRot+=.01;
         }
 
