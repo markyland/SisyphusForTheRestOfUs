@@ -3,10 +3,6 @@ package research;
 import com.slightlyloony.jsisyphus.ATrack;
 import com.slightlyloony.jsisyphus.Point;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.image.ImageObserver;
-import java.awt.image.PixelGrabber;
 import java.io.IOException;
 
 /**
@@ -15,32 +11,34 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class TestSphere2 extends ATrack {
+public class TestBlackHole extends ATrack {
     double eraseSpace=0.0125;
 
-    public TestSphere2() throws Exception {
+    public TestBlackHole() throws Exception {
         super("");
 
         trace();
     }
 
     protected void trace() throws IOException {
-        Point3D p = new Point3D(0, -.75, 0);
+        Point3D p = new Point3D(0, -.9, 0);
 
-        double xRot=.5;
+        double xRot=.3;
         double yRot=0;
 
-        while (xRot<Math.PI){
-            Point3D p2 = rotX(p, xRot);
+        while (xRot<Math.PI-.7){
+            double newY=p.y+xRot/2;
+            Point3D p2 = new Point3D(p.x+Math.pow((newY+1+.1)/2, 3), newY, p.z);
             p2 = rotY(p2, yRot);
-            p2 = rotX(p2, -.8);
+            p2 = rotX(p2, .6);
+//            p2 = new Point3D(p2.x, p2.y, p2.z-1);
 
-            Point point = Point.fromXY(p2.x/2*(p2.z+2), p2.y/2*(p2.z+2));
+           Point point = Point.fromXY(p2.x*(p2.z+2), p2.y*(p2.z+2));
 //            Point point = Point.fromXY(p2.x, p2.y);
 
             go(point);
 
-            xRot+=.00007;
+            xRot+=.000035;
             yRot+=.01;
         }
 
@@ -79,6 +77,6 @@ public class TestSphere2 extends ATrack {
     }
 
     public static void main(String args[]) throws Exception {
-        TestSphere2 me = new TestSphere2();
+        TestBlackHole me = new TestBlackHole();
     }
 }

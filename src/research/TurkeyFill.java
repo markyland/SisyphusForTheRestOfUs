@@ -25,7 +25,7 @@ public class TurkeyFill {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
-                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\boris-table.png");
+                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\butterfly-table.png");
 
                 Image img = icon.getImage();
 
@@ -96,7 +96,7 @@ public class TurkeyFill {
                 double rho=0;
                 double theta=0;
 
-                boolean eyeDrawn=true;
+                boolean eyeDrawn=false;
 
                 while (true){
                     theta+=.01;
@@ -111,7 +111,7 @@ public class TurkeyFill {
                     double frequency=20;
 
                     double rhoRed=wiggleAmount/2 * Math.sin(theta*frequency*2.1) * eraseSpace;    //background
-                    double rhoGreen=wiggleAmount * Math.sin(theta*frequency+theta/15) * eraseSpace;            //foreground
+                    double rhoGreen=wiggleAmount/1.5 * Math.sin(theta*frequency+theta/20) * eraseSpace;            //foreground
                     double rhoBlue=wiggleAmount/2 * Math.sin(theta*frequency*1.5) * eraseSpace;            //foreground
                     double rhoWhite=0;   //wiggleAmount * Math.sin(theta*rho*frequency*2) * eraseSpace;
                     double rhoBlack=wiggleAmount/1.2 * Math.pow(Math.sin(theta*frequency*2.3),2) * eraseSpace;//wiggleAmount/1.5 * Math.sin(theta*frequency*2.3) * eraseSpace;
@@ -174,12 +174,12 @@ public class TurkeyFill {
 
                     dc.lineTo(dc.getCurrentRelativePosition().vectorTo(dest));
 
-                    if (theta>351.93+Math.PI*2 && !eyeDrawn){
-                        eraseAndCircle(dc, .01);
-                        eraseAndCircle(dc, .01);
-
-                        eyeDrawn=true;
-                    }
+//                    if (theta>350.35+Math.PI*10 && !eyeDrawn){
+//                        eraseAndCircle(dc, .015);
+//                        eraseAndCircle(dc, .015);
+//
+//                        eyeDrawn=true;
+//                    }
                 }
 
                 dc.renderPNG( "c:\\users\\mark\\desktop\\fill.png" );
