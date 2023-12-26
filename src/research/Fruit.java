@@ -52,7 +52,7 @@ public class Fruit extends ATrack {
 
         drawSphere(0, 0, .28, 0, -.15, false, false);
 
-        drawSphere(0, 0, .2, -.35, .11, false, true);
+        drawSphere(0, 0, .2, -.1, 0, false, true);
 
         dc.renderPNG( "c:\\users\\mark\\desktop\\fill.png" );
         dc.write( "c:\\users\\mark\\desktop\\fill.thr" );
@@ -68,13 +68,15 @@ public class Fruit extends ATrack {
             p2 = rotY(p2, yRot);
             p2 = rotX(p2, -.4);
 
-            Point point = Point.fromXY((isBowl ? 1.1 : 1)*p2.x/2*(p2.z+2)+xShift, (isBread ? 3.5 : 1)*p2.y/2*(p2.z+2)+yShift);
+            Point point = Point.fromXY((isBowl ? 1.1 : 1)*p2.x/2*(p2.z+2), (isBread ? 4 : 1)*p2.y/2*(p2.z+2));
 
             if (isBread){
-                Point3D temp = rotZ(new Point3D(point.x, point. y, 0), -.4);
+                Point3D temp = rotZ(new Point3D(point.x, point. y, 0), -.6);
 
                 point=Point.fromXY(temp.x, temp.y);
             }
+
+            point=Point.fromXY(point.x+xShift, point.y+yShift);
 
             go(point);
 
