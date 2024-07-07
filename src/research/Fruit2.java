@@ -11,10 +11,10 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class Fruit extends ATrack {
+public class Fruit2 extends ATrack {
     double eraseSpace=0.0125;
 
-    public Fruit() throws Exception {
+    public Fruit2() throws Exception {
         super("");
 
         trace();
@@ -23,40 +23,9 @@ public class Fruit extends ATrack {
     protected void trace() throws IOException {
         drawSphere(0, 0, .65, 0, -.1, true, false);
 
-        double grapeSize=.06;
-
-        double grapeShift=1;
-
-        drawSphere(0, 0, grapeSize, -.34+grapeShift, -.18, false, false);
-        drawSphere(0, 0, grapeSize, -.4+grapeShift, -.1, false, false);
-        drawSphere(0, 0, grapeSize, -.5+grapeShift, -.1, false, false);
-//        drawSphereTest(0, 0, grapeSize, .48, .01, false, false);
-//        drawSphereTest(0, 0, grapeSize, .51, .07, false, false);
-        drawSphere(0, 0, grapeSize, -.6+grapeShift, 0, false, false);
-        drawSphere(0, 0, grapeSize, -.57+grapeShift, -.12, false, false);
-
-        go(Point.fromXY(-.675+grapeShift, -.038));
-        go(Point.fromXY(-.77+grapeShift, .06));
-        go(Point.fromXY(-.675+grapeShift, -.038));
-
-        drawSphere(0, 0, grapeSize, -.68+grapeShift, -.08, false, false);
-        drawSphere(0, 0, grapeSize, -.69+grapeShift, -.2, false, false);
-        drawSphere(0, 0, grapeSize, -.77+grapeShift, -.17, false, false);
-        drawSphere(0, 0, grapeSize, -.78+grapeShift, -.29, false, false);
-        drawSphere(0, 0, grapeSize, -.67+grapeShift, -.32, false, false);
-        drawSphere(0, 0, grapeSize, -.6+grapeShift, -.22, false, false);
-        drawSphere(0, 0, grapeSize, -.56+grapeShift, -.34, false, false);
-        drawSphere(0, 0, grapeSize, -.45+grapeShift, -.35, false, false);
-        drawSphere(0, 0, grapeSize, -.51+grapeShift, -.27, false, false);
-        drawSphere(0, 0, grapeSize, -.47+grapeShift, -.19, false, false);
-        drawSphere(0, 0, grapeSize, -.39+grapeShift, -.25, false, false);
-        drawSphere(0, 0, grapeSize, -.35+grapeShift, -.355, false, false);
-        drawSphere(0, 0, grapeSize, -.29+grapeShift, -.26, false, false);
-        drawSphere(0, 0, grapeSize, -.24+grapeShift, -.36, false, false);
-
         drawSphere(0, 0, .2, -.1, -.3, false, false);
+        drawSphere(0, 0, .2, .3, -.3, false, false);
 
-    //    drawSphere(0, 0, .2, -.1, 0, false, true);
 
         dc.renderPNG( "c:\\users\\mark\\desktop\\fill.png" );
         dc.write( "c:\\users\\mark\\desktop\\fill.thr" );
@@ -130,6 +99,6 @@ public class Fruit extends ATrack {
     }
 
     public static void main(String args[]) throws Exception {
-        Fruit me = new Fruit();
+        Fruit2 me = new Fruit2();
     }
 }

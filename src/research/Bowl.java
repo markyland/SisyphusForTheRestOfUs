@@ -30,16 +30,17 @@ public class Bowl extends ATrack {
             Point3D p2 = rotX(p, xRot);
 
             p2 = rotY(p2, yRot);
-            p2 = rotX(p2, .35);
+            p2 = rotX(p2, 1);
 
-            p2 = new Point3D(p2.x*1.2, p2.y, p2.z*1.2);
+            p2 = new Point3D(p2.x*1.2, p2.y, p2.z*1.2-4);
 
-        //    Point point = Point.fromXY(p2.x/2*(p2.z+2), p2.y/2*(p2.z+2));
-           Point point = Point.fromXY(p2.x, p2.y);
-
+            double d = 5;
+            Point point = Point.fromXY(-d * p2.x / p2.z, -d * p2.y / p2.z);
+            // Point point = Point.fromXY(p2.x, p2.y);
+            System.err.println(point);
             go(point);
 
-            xRot+=xRot<.6 ? .000025 : .00004;
+            xRot+=xRot<.7 ? .000025 : .00004;
             yRot+=.01;
         }
 

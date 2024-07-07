@@ -25,22 +25,22 @@ public class TestSphere2 extends ATrack {
     }
 
     protected void trace() throws IOException {
-        Point3D p = new Point3D(0, -.75, 0);
+        Point3D p = new Point3D(0, -.65, 0);
 
-        double xRot=.5;
+        double xRot=0;
         double yRot=0;
 
         while (xRot<Math.PI){
             Point3D p2 = rotX(p, xRot);
             p2 = rotY(p2, yRot);
-            p2 = rotX(p2, -.8);
+            p2 = rotX(p2, -.4);
 
             Point point = Point.fromXY(p2.x/2*(p2.z+2), p2.y/2*(p2.z+2));
 //            Point point = Point.fromXY(p2.x, p2.y);
 
             go(point);
 
-            xRot+=.00007;
+            xRot+=.00005;
             yRot+=.01;
         }
 

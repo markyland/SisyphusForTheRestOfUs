@@ -2,6 +2,7 @@ package research;
 
 import com.slightlyloony.jsisyphus.ATrack;
 import com.slightlyloony.jsisyphus.Delta;
+import com.slightlyloony.jsisyphus.DrawingContext;
 import com.slightlyloony.jsisyphus.Point;
 import com.slightlyloony.jsisyphus.lines.Line;
 import com.slightlyloony.jsisyphus.lines.StraightLine;
@@ -18,7 +19,7 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class TestFiller10 extends ATrack {
+public class Homer extends ATrack {
 
     private boolean backwards=false;
 
@@ -28,12 +29,17 @@ public class TestFiller10 extends ATrack {
 
     double yDelta;
 
+    private Ball balls[] = {
+            new Ball(.021, .07, .02, 1),
+            new Ball(-.25, .14, .02, 1)
+    };
+
     private static double maxPointDistance = 0.001;  // approximately 2mm on A16 table...
 
-    public TestFiller10() throws Exception {
+    public Homer() throws Exception {
         super("");
 
-        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\mountain-table.png");
+        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\homer-table.png");
 
         Image img = icon.getImage();
 
@@ -148,7 +154,7 @@ public class TestFiller10 extends ATrack {
             Point point3=point2;
 
             if (fill==0){
-             //   point3=Point.fromXY(point3.x, point3.y+Math.sin(10*point3.x+point3.y*20)*.008);
+                //   point3=Point.fromXY(point3.x, point3.y+Math.sin(10*point3.x+point3.y*20)*.008);
             }
             if (fill==1){
 //                boolean raised = ((int)(point3.x/.11-point3.y*9))%2==0;
@@ -157,7 +163,7 @@ public class TestFiller10 extends ATrack {
 
                 double length=.35;
                 //boolean raised = (point3.x+1)%length<length/2;
-                boolean raised = (point3.x+1+(Math.sin(-point3.y*1.6+.3))+1)%length<length*.45;
+                boolean raised = (point3.x+1+(Math.sin(-point3.y*1.3))+1)%length<length*.45;
                 point3=Point.fromXY(point3.x, point3.y+(raised ? .015 : 0));
 
 //                double blah=.02;
@@ -176,6 +182,12 @@ public class TestFiller10 extends ATrack {
 
             if (fill!=fill2){ //we've got into a another fill.  its a tricky situation but default should be good
                 point3=point2;
+            }
+
+            for (Ball ball : balls) {
+                if ((point3.x >= ball.x ^ (point3.x + delta.x) >= ball.x) && (point3.y <= ball.y ^ (point3.y + yDelta <= ball.y))) {
+                    eraseAndCircle(dc, ball.size, ball.turns);
+                }
             }
 
             go(point3);
@@ -221,7 +233,39 @@ public class TestFiller10 extends ATrack {
 //        }
 //    }
 
+    private void eraseAndCircle(DrawingContext dc, double size, int turns){
+        double x=dc.getCurrentPosition().getX();
+        double y=dc.getCurrentPosition().getY();
+
+        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromXY(x, y+0.024+size)));
+
+        //    dc.spiralToXY(0, size, 0, size, 15);
+        dc.spiralToXY(0, -size, 0, 0, turns);
+        dc.arcAround(dc.getCurrentRelativePosition().vectorTo(Point.fromXY(x, y+0.024+size)), 2*Math.PI);
+        dc.arcAround(dc.getCurrentRelativePosition().vectorTo(Point.fromXY(x, y+0.024+size)), 2*Math.PI);
+        dc.arcAround(dc.getCurrentRelativePosition().vectorTo(Point.fromXY(x, y+0.024+size)), 2*Math.PI);
+        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromXY(x, y)));
+
+//        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromXY(x, y+xDelta*1.2)));
+//        //  dc.arcAroundRT(size, 0, Math.PI*2);
+//        dc.spiralToXY(0, size, 0, size, 15);
+//        dc.spiralToXY(0, -size, 0, 0, 15);
+//        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(Point.fromXY(x, y)));
+    }
+
+    public class Ball {
+        private double x, y, size;
+        private int turns;
+
+        public Ball(double x, double y, double size, int turns) {
+            this.x = x;
+            this.y = y-size;
+            this.size = size;
+            this.turns = turns;
+        }
+    }
+
     public static void main(String args[]) throws Exception {
-        TestFiller10 me = new TestFiller10();
+        Homer me = new Homer();
     }
 }

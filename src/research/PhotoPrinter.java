@@ -21,7 +21,7 @@ public class PhotoPrinter {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
-                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\marilyn.png");
+                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\einstein.jpg");
 
                 Image img = icon.getImage();
 
@@ -67,7 +67,7 @@ public class PhotoPrinter {
                 double rho=0;
                 double theta=0;//dc.getCurrentPosition().getTheta();
 
-                while (rho+eraseSpace<1){
+                while (rho+eraseSpace<.9){
                     theta+=.01;
 
                     rho=theta / (2 * Math.PI) * (eraseSpace);
@@ -81,10 +81,17 @@ public class PhotoPrinter {
 
                     //wiggle=1, freq=100, eraseSpace=0.0125  //nice medium color
 
-                    double wiggleAmount=(1-(pixels[(int)Math.round(500-500*(y/2+.5))][(int)Math.round(500*(x/2+.5))] / 255.0))*4;
-                    double frequency=100;
+//                    double wiggleAmount=(1-(pixels[(int)Math.round(500-500*(y/2+.5))][(int)Math.round(500*(x/2+.5))] / 255.0))*1.05*(rho+1);
+                    double wiggleAmount=Math.pow(rho*1.8, 2);
 
-                    double additionalRho=wiggleAmount * Math.sin(theta*frequency*rho) * eraseSpace;
+                    if (wiggleAmount<.1){
+                        wiggleAmount=0;
+                    }
+
+                    System.err.println(wiggleAmount);
+                    double frequency=60;
+
+                    double additionalRho=wiggleAmount * Math.sin(theta*frequency) * eraseSpace;
 
                     Point dest = Point.fromRT(rho+additionalRho, theta);
 
@@ -100,6 +107,7 @@ public class PhotoPrinter {
             }
         }.trace();
     }
+
 
     public static void main(String args[]) throws Exception {
         PhotoPrinter me = new PhotoPrinter();

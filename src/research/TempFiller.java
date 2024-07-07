@@ -15,7 +15,7 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class TestFiller16 extends ATrack {
+public class TempFiller extends ATrack {
     private static double maxPointDistance = 0.004;  // approximately 2mm on A16 table...
 
     private static final double yDelta=.012;
@@ -27,7 +27,7 @@ public class TestFiller16 extends ATrack {
     private int width;
     private int height;
 
-    public TestFiller16() throws Exception {
+    public TempFiller() throws Exception {
         super("");
 
         loadImage();
@@ -72,12 +72,12 @@ public class TestFiller16 extends ATrack {
     }
 
     protected void trace() throws IOException {
-        Point point=Point.fromXY(-1.1, 1);
+        Point point=Point.fromXY(-1.1, -1.1);
         dc.lineTo(dc.getCurrentRelativePosition().vectorTo(point));
 
        // squareV();
 
-        squareH(.01, false);
+      //  squareH(.01, false);
         squareH(yDelta, true);
 
         dc.renderPNG( "c:\\users\\mark\\desktop\\fill.png" );
@@ -89,22 +89,22 @@ public class TestFiller16 extends ATrack {
     private void squareH(double yDelta, boolean effect){
         Point point;
 
-        point=Point.fromXY(-1.1, 1);
+        point=Point.fromXY(-1.1, -1.1);
         go(point);
 
-        double y=1;
+        double y=-1;
 
-        while (y>=-1.1){
+        while (y<=1.1){
             line(y, true, effect);
 
-            y-=yDelta;
+            y+=yDelta;
 
             point=Point.fromXY(1.1, y);
             go(point);
 
             line(y, false, effect);
 
-            y-=yDelta;
+            y+=yDelta;
 
             point=Point.fromXY(-1.1, y);
             go(point);
@@ -178,9 +178,16 @@ public class TestFiller16 extends ATrack {
     }
 
     private double in(double x, double y){
+        int rowBelowFill=255-getFill(Point.fromXY(x, y+yDelta));
+
+
+        if (rowBelowFill<128 && ((int)(x/yDelta))%2==0){
+            return 0;
+        }
+
         int fill=255-getFill(Point.fromXY(x, y));
 
-        return fill/255.0*.05;
+        return -fill/255.0*.1;
     }
 
     private void go(Point point){
@@ -201,6 +208,6 @@ public class TestFiller16 extends ATrack {
     }
 
     public static void main(String args[]) throws Exception {
-        TestFiller16 me = new TestFiller16();
+        TempFiller me = new TempFiller();
     }
 }

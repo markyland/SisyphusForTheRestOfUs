@@ -25,7 +25,7 @@ public class TurkeyFill {
         new ATrack(""){
             @Override
             protected void trace() throws IOException {
-                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\butterfly-table.png");
+                ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\circlefun-table.png");
 
                 Image img = icon.getImage();
 

@@ -15,10 +15,10 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class TestFiller16 extends ATrack {
-    private static double maxPointDistance = 0.004;  // approximately 2mm on A16 table...
+public class TestFiller17 extends ATrack {
+    private static double maxPointDistance = 0.003;  // approximately 2mm on A16 table...
 
-    private static final double yDelta=.012;
+    private static final double yDelta=.016;
     private static final double xDelta=.016;
 
     double degrees=90;
@@ -27,7 +27,7 @@ public class TestFiller16 extends ATrack {
     private int width;
     private int height;
 
-    public TestFiller16() throws Exception {
+    public TestFiller17() throws Exception {
         super("");
 
         loadImage();
@@ -35,7 +35,7 @@ public class TestFiller16 extends ATrack {
     }
 
     private void loadImage(){
-        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\star.png");
+        ImageIcon icon = new ImageIcon("C:\\Users\\mark\\Desktop\\floor.png");
 
         Image img = icon.getImage();
 
@@ -72,13 +72,15 @@ public class TestFiller16 extends ATrack {
     }
 
     protected void trace() throws IOException {
-        Point point=Point.fromXY(-1.1, 1);
-        dc.lineTo(dc.getCurrentRelativePosition().vectorTo(point));
+        // squareV();
 
-       // squareV();
-
-        squareH(.01, false);
+        // squareH(.01, false);
         squareH(yDelta, true);
+
+        go(Point.fromXY(2.1, 2.1));
+        go(Point.fromXY(2.1, -.2));
+        go(Point.fromXY(-2.1, -.2));
+        go(Point.fromXY(.23, -.2));
 
         dc.renderPNG( "c:\\users\\mark\\desktop\\fill.png" );
         dc.write( "c:\\users\\mark\\desktop\\fill.thr" );
@@ -89,85 +91,69 @@ public class TestFiller16 extends ATrack {
     private void squareH(double yDelta, boolean effect){
         Point point;
 
-        point=Point.fromXY(-1.1, 1);
+        point=Point.fromXY(-2.1, 2.1);
         go(point);
 
-        double y=1;
+        double y=2.1;
 
-        while (y>=-1.1){
+        while (y>=-2.1){
             line(y, true, effect);
 
             y-=yDelta;
 
-            point=Point.fromXY(1.1, y);
+            point=Point.fromXY(2.1, y);
             go(point);
 
             line(y, false, effect);
 
             y-=yDelta;
 
-            point=Point.fromXY(-1.1, y);
+            point=Point.fromXY(-2.1, y);
             go(point);
         }
 
-        line(1.1, true, effect);
-    }
-
-    private void squareV(){
-        Point point;
-
-        point=Point.fromXY(1.1, 1.1);
-        go(point);
-
-        double x=1.1;
-
-        while (x>=-1.1){
-            point=Point.fromXY(x, -1.1);
-            go(point);
-
-            x-=xDelta;
-
-            point=Point.fromXY(x, -1.1);
-            go(point);
-
-            point=Point.fromXY(x, 1.1);
-            go(point);
-
-            x-=xDelta;
-
-            point=Point.fromXY(x, 1.1);
-            go(point);
-        }
-
-        point=Point.fromXY(-1.1, 1.1);
-        go(point);
+        line(2.1, true, effect);
     }
 
     private void line(double y, boolean isRight, boolean effect) {
-        double xOffset=0;
-        double yOffset=0;
+        double x = isRight ? -2.1 : 2.1;
 
-        double lastY=0;
-
-        double x = isRight ? -1.1 : 1.1;
-
-        while (isRight ? (x <= 1.1) : (x>=-1.1)) {
+        while (isRight ? (x <= 2.1) : (x>=-2.1)) {
             Point point = Point.fromXY(x, y);
 
             Point point2=point;
 
             //-----------effect on point 3-----------
             if (effect) {
-                double curY = in(point.x, point.y);
+                double fill = getFill(point);
 
-                double diffY = curY - lastY;
+                double xOffset=0;
+                double yOffset=0;
 
-                yOffset += diffY;
-                xOffset += diffY * Math.cos(Math.toRadians(90));
+                if (y>-.2){
+                    double freq=25;
+                    double height=.015;
+                    double skew=.02;
+
+                    yOffset=Math.sin(x*freq)*height;
+                    xOffset=Math.sin(x*freq)*skew;
+                }
+                else if (y<=-.2){
+                    double freq=15;
+                    double height=.03;
+                    double skew=.03;
+
+                    yOffset=Math.sin(x*freq)*height/2;
+                    xOffset=Math.sin(x*freq)*skew - y*2.6 - .7;
+                }
+
+                double fillPert = getFill(Point.fromXY(point.x+xOffset, point.y));
+
+                if (fillPert==0) {
+                    yOffset += Math.sin(x*50)*.03;
+                }
 
                 point2 = Point.fromXY(x + xOffset, point2.y + yOffset);
-
-                lastY=curY;
             }
             //---------------------------------------
 
@@ -175,12 +161,6 @@ public class TestFiller16 extends ATrack {
 
             x += (isRight ? 1 : -1) * maxPointDistance;
         }
-    }
-
-    private double in(double x, double y){
-        int fill=255-getFill(Point.fromXY(x, y));
-
-        return fill/255.0*.05;
     }
 
     private void go(Point point){
@@ -201,6 +181,6 @@ public class TestFiller16 extends ATrack {
     }
 
     public static void main(String args[]) throws Exception {
-        TestFiller16 me = new TestFiller16();
+        TestFiller17 me = new TestFiller17();
     }
 }

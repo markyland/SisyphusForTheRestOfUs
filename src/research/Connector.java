@@ -29,7 +29,7 @@ public class Connector {
 
         double theta2=Double.parseDouble(line.split(" ")[0]);
 
-        double diff = (int)((theta1-theta2)/(Math.PI*2))*(Math.PI*2);
+        double diff = (int)((theta1-theta2)/(Math.PI*2))*(Math.PI*2)+(2*Math.PI);
 
         while (line!=null){
             double theta=Double.parseDouble(line.split(" ")[0]);

@@ -11,34 +11,37 @@ import java.io.IOException;
  * Date: 2/28/18
  * Time: 8:44 AM
  */
-public class TestBlackHole extends ATrack {
+public class WeirdSphere extends ATrack {
     double eraseSpace=0.0125;
 
-    public TestBlackHole() throws Exception {
+    public WeirdSphere() throws Exception {
         super("");
 
         trace();
     }
 
     protected void trace() throws IOException {
-        Point3D p = new Point3D(0, -.9, 0);
+        Point3D p = new Point3D(0, -.65, 0);
 
-        double xRot=.3;
+        double xRot=0;
         double yRot=0;
 
         while (xRot<Math.PI){
-            double newY=p.y+xRot/2;
-            Point3D p2 = new Point3D(p.x+Math.pow((newY+1+.1)/2, 3), newY, p.z);
+            Point3D p2 = rotX(p, xRot);
             p2 = rotY(p2, yRot);
-            p2 = rotX(p2, 1.1);
-//            p2 = new Point3D(p2.x, p2.y, p2.z-1);
+            p2 = rotX(p2, -.4);
 
-           Point point = Point.fromXY(-3*p2.x/(p2.z-2.5), -3*p2.y/(p2.z-2.5));
+            Point point = Point.fromXY(p2.x/2*(p2.z+2), p2.y/2*(p2.z+2));
 //            Point point = Point.fromXY(p2.x, p2.y);
+
+            double wiggleAmount=3*(1-Math.abs(2*Math.pow(point.rho, 1.1)-1));
+            double frequency=20;
+
+            point = Point.fromRT(point.rho+(wiggleAmount/2 * Math.sin(point.theta*frequency*1.5) * eraseSpace), point.theta);
 
             go(point);
 
-            xRot+=xRot<1.8 ? .00007 : .000035;
+            xRot+=.00005;
             yRot+=.01;
         }
 
@@ -77,6 +80,6 @@ public class TestBlackHole extends ATrack {
     }
 
     public static void main(String args[]) throws Exception {
-        TestBlackHole me = new TestBlackHole();
+        WeirdSphere me = new WeirdSphere();
     }
 }
