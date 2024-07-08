@@ -526,17 +526,27 @@ public class GraphSolver {
     static JProgressBar progressBar;
 
     public static void convert(String inputFile, String outputFileTHR, String outputFilePNG, boolean addErase, JProgressBar progressBar) throws Exception {
-        vertices.clear();
-        currentVertice=1;
-        pathList.clear();
-        answerPoints.clear();
-
         System.out.println("Creating paths");
         GraphSolver.progressBar=progressBar;
 
         VectorCreator vectorCreator = new VectorCreator();
 
-        ArrayList<ArrayList<VectorCreator.Point>> vectorCreatorPaths = vectorCreator.getPaths(inputFile);
+        ArrayList<ArrayList<ArrayList<VectorCreator.Point>>> vectorCreatorAllPaths = vectorCreator.getAllPaths(inputFile);
+
+        ArrayList<ArrayList<VectorCreator.Point>> vectorCreatorPaths = vectorCreatorAllPaths.get(0);
+
+        convert(vectorCreatorPaths);
+
+        plot(outputFileTHR, outputFilePNG, answerPoints, addErase);
+
+        // System.out.println("Cost = " + G.cost());
+    }
+
+    private static void convert(ArrayList<ArrayList<VectorCreator.Point>> vectorCreatorPaths){
+        vertices.clear();
+        currentVertice=1;
+        pathList.clear();
+        answerPoints.clear();
 
         int lastPath=-1;
 
@@ -691,10 +701,6 @@ public class GraphSolver {
 //        for (Point point : answerPoints){
 //            System.err.println(point.x + "," + point.y);
 //        }
-
-        plot(outputFileTHR, outputFilePNG, answerPoints, addErase);
-
-        // System.out.println("Cost = " + G.cost());
     }
 
     private static void plot(final String outputFileTHR, final String outputFilePNG, final List<Point> points, final boolean addErase) throws Exception {

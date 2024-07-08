@@ -13,7 +13,12 @@ import java.util.*;
  */
 public class VectorCreator {
 
-    public ArrayList<ArrayList<Point>> getPaths(String inputPath) {
+    //The ArrayList<ArrayList<ArrayList<Point>>> is not as bad as it looks
+    //The outer ArrayList represents each non-connected drawing
+    //The middle ArrayList represents the segments of a drawing
+    //The inner ArrayList holds the points in a segment
+
+    public ArrayList<ArrayList<ArrayList<Point>>> getAllPaths(String inputPath) {
         ImageIcon icon = new ImageIcon(inputPath);
 
         Image img = icon.getImage();
@@ -62,75 +67,16 @@ public class VectorCreator {
 //
 //        System.err.println("");
 
-        //find first point
+        ArrayList<ArrayList<ArrayList<Point>>> allPaths = new ArrayList<>();
 
-        int xStart = -1;
-        int yStart = -1;
-        for (int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                if (pixels[y][x] == 1) {
-                    xStart = x;
-                    yStart = y;
-                }
-            }
+        ArrayList<ArrayList<Point>> path = getConnectedPath(pixels, width, height);
+        while (path!=null) {
+            allPaths.add(path);
+
+            path = getConnectedPath(pixels, width, height);
         }
 
-        if (xStart == -1 || yStart == -1) {
-            throw new IllegalStateException("Error: No starting point");
-        }
-
-        //---------------------------------------------------------------------------------------------------------
-        undiagonalfy(pixels);
-
-//        for (int i = 0; i < height; i++) {
-//            for (int j = 0; j < width; j++) {
-//                System.err.print(pixels[i][j] == 0 ? "." : pixels[i][j]);
-//            }
-//            System.err.println("");
-//        }
-
-        //      System.err.println("");
-        //---------------------------------------------------------------------------------------------------------
-
-        ArrayList<ArrayList<Point>> paths = getPaths(pixels, xStart, yStart);
-
-        rediagonalfy(paths);
-
-        //---------------------------------------------------------------------------------------------------------
-
-//        try {
-//            BufferedWriter out = new BufferedWriter(new FileWriter("C:\\Users\\mark\\Desktop\\flower.asc"));
-//
-//            int sz=paths.size();
-//            for (int i=0; i<sz; i++){
-//                ArrayList<Point> path = paths.get(i);
-//
-//                for (Point point : path) {
-//                    out.write(","+point.x + "," + (height-point.y-1) + ",0," + (i+1) + "\n");
-//                }
-//            }
-//
-//            out.flush();
-//            out.close();
-//        }
-//        catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-        for (ArrayList<Point> path : paths) {
-            for (Point point : path) {
-                point.y=height-point.y-1;
-            }
-        }
-
-//        for (ArrayList<Point> path : paths){
-//            for (Point point : path) {
-//                System.err.print(point.x+","+point.y + " ");
-//            }
-//            System.err.println("");
-//        }
-
-        return paths;
+        return allPaths;
     }
 
     private ArrayList<ArrayList<Point>> getPaths(int pixels[][], int x, int y){
@@ -241,6 +187,79 @@ public class VectorCreator {
         return paths;
     }
 
+    private  ArrayList<ArrayList<Point>> getConnectedPath(int pixels[][], int width, int height){
+        //find first point
+
+        int xStart = -1;
+        int yStart = -1;
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (pixels[y][x] == 1) {
+                    xStart = x;
+                    yStart = y;
+                    //shouldn't we break out of both loops here?
+                }
+            }
+        }
+
+        if (xStart == -1 || yStart == -1) {
+            return null;
+        }
+
+        //---------------------------------------------------------------------------------------------------------
+        undiagonalfy(pixels);
+
+//        for (int i = 0; i < height; i++) {
+//            for (int j = 0; j < width; j++) {
+//                System.err.print(pixels[i][j] == 0 ? "." : pixels[i][j]);
+//            }
+//            System.err.println("");
+//        }
+
+        //      System.err.println("");
+        //---------------------------------------------------------------------------------------------------------
+
+        ArrayList<ArrayList<Point>> paths = getPaths(pixels, xStart, yStart);
+
+        rediagonalfy(paths);
+
+        //---------------------------------------------------------------------------------------------------------
+
+//        try {
+//            BufferedWriter out = new BufferedWriter(new FileWriter("C:\\Users\\mark\\Desktop\\flower.asc"));
+//
+//            int sz=paths.size();
+//            for (int i=0; i<sz; i++){
+//                ArrayList<Point> path = paths.get(i);
+//
+//                for (Point point : path) {
+//                    out.write(","+point.x + "," + (height-point.y-1) + ",0," + (i+1) + "\n");
+//                }
+//            }
+//
+//            out.flush();
+//            out.close();
+//        }
+//        catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
+        for (ArrayList<Point> path : paths) {
+            for (Point point : path) {
+                point.y=height-point.y-1;
+            }
+        }
+
+//        for (ArrayList<Point> path : paths){
+//            for (Point point : path) {
+//                System.err.print(point.x+","+point.y + " ");
+//            }
+//            System.err.println("");
+//        }
+
+        return paths;
+    }
+
     private void undiagonalfy(int pixels[][]) {
         for (int y=0; y<pixels.length; y++) {
             for (int x=0; x<pixels[0].length; x++) {
@@ -310,6 +329,6 @@ public class VectorCreator {
     public static void main(String args[]){
         VectorCreator me = new VectorCreator();
 
-        me.getPaths("C:\\Users\\mark\\Desktop\\dreidel.png");
+        me.getAllPaths("C:\\Users\\mark\\Desktop\\dreidel.png");
     }
 }
