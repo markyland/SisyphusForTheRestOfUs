@@ -16,7 +16,8 @@ import java.io.IOException;
  * Time: 8:44 AM
  */
 public class JustAGrid extends ATrack {
-    private static double maxPointDistance = 0.001;  // approximately 2mm on A16 table...
+    private static double maxPointDistance = 0.01;  // approximately 2mm on A16 table...
+    private static double maxPointDistanceCenter = 0.001;  // approximately 2mm on A16 table...
 
     private static final double yDelta=.012;
     private static final double xDelta=.016;
@@ -107,7 +108,7 @@ public class JustAGrid extends ATrack {
 
             go(point);
 
-            x += (isRight ? 1 : -1) * maxPointDistance;
+            x += (isRight ? 1 : -1) * (point.rho<.1 || point.rho>.9 ? maxPointDistanceCenter : maxPointDistance);
         }
     }
 
