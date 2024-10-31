@@ -73,7 +73,7 @@ public class LineBackgroundMaker extends ATrack {
 
     protected void trace() throws IOException {
         Point point=Point.fromXY(-1.1, 1);
-        lineTo(point);
+        go(point);
 
         // squareV();
 
@@ -89,7 +89,7 @@ public class LineBackgroundMaker extends ATrack {
         Point point;
 
         point=Point.fromXY(-1.1, 1.1);
-        lineTo(point);
+        go(point);
 
         double y=1.1;
 
@@ -99,14 +99,14 @@ public class LineBackgroundMaker extends ATrack {
             y-=yDelta;
 
             point=Point.fromXY(1.1, y);
-            lineTo(point);
+            go(point);
 
             line(y, false);
 
             y-=yDelta;
 
             point=Point.fromXY(-1.1, y);
-            lineTo(point);
+            go(point);
         }
     }
 
@@ -141,17 +141,17 @@ public class LineBackgroundMaker extends ATrack {
             double waveHeight=.015;
             double waveFreq=40;
 
-            yAdjustment=Math.sin(waveFreq*point.x)*waveHeight;
+            yAdjustment=Math.sin(waveFreq*point.x+point.y*-31.4)*waveHeight;
         }
 
         Point point2=Point.fromXY(point.x, point.y+yAdjustment);
-        
+
         int color2=getFill(point2);
 
         if (color!=color2){ //we've got into a another fill.  lets go back to the unadjusted point
             point2=point;
         }
-        
+
         return point2;
     }
 
