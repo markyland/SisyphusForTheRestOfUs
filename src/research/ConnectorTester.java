@@ -2,10 +2,7 @@ package research;
 
 import com.slightlyloony.jsisyphus.Point;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.*;
 import java.util.ArrayList;
 
 public class ConnectorTester {
@@ -13,8 +10,10 @@ public class ConnectorTester {
     public static void main(String args[]) throws Exception {
         ArrayList<Point> background = loadPoints(args[0]);
 
-        for (int inputFileIndex=1; inputFileIndex<args.length; inputFileIndex++) {
-            ArrayList<Point> foreground = loadPoints(args[inputFileIndex]);
+        File[] thrFiles = new File(args[1]).listFiles((dir, name) -> name.toLowerCase().endsWith(".thr"));
+
+        for (File thrFile : thrFiles) {
+            ArrayList<Point> foreground = loadPoints(thrFile.getPath());
 
             int foregroundSize = foreground.size();
 
@@ -40,7 +39,7 @@ public class ConnectorTester {
 
                 double hypot=Math.hypot(backgroundPoint.x - maxPoint.x, backgroundPoint.y - maxPoint.y);
 
-                if (hypot < .03 ) {
+                if (hypot < .0225 ) {
                     ArrayList<Point> temp = new ArrayList<>();
 
                     double diff1 = (int) ((backgroundPoint.theta - maxPoint.theta) / (Math.PI * 2)) * (Math.PI * 2) - (2 * Math.PI);
